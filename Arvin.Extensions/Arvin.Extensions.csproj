@@ -21,5 +21,8 @@
   <!-- 为 net6.0 设置 LangVersion -->  
   <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">  
     <LangVersion>10.0</LangVersion> <!-- net6.0 支持 C# 10 -->  
-  </PropertyGroup> 
+  </PropertyGroup>  
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup> 
 </Project>
