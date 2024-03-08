@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net461;net6.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;net48;net6.0</TargetFrameworks>
     <ImplicitUsings>disable</ImplicitUsings>
     <!--NuGet配置-->
     <PackageId>Arvin.Helpers</PackageId>  
@@ -16,7 +16,7 @@
   </PropertyGroup>  
   <!-- 为 net461 设置 LangVersion -->  
   <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">  
-    <LangVersion>7.3</LangVersion> <!-- net461 不支持 C# 8 或更高版本，因此使用 7.3 或更低版本 -->  
+    <LangVersion>7.3</LangVersion> <!-- net48 不支持 C# 8 或更高版本，因此使用 7.3 或更低版本 -->  
   </PropertyGroup>  
   <!-- 为 net6.0 设置 LangVersion -->  
   <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">  
