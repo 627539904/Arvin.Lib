@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;net461;net6.0</TargetFrameworks>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!--NuGet配置-->
+    <PackageId>Arvin.Helpers</PackageId>  
+    <Version>1.0.0</Version>  
+    <Authors>Arvin Jing</Authors>  
+    <Description>Nuget包发布测试【无实现】，立项，计划用于功能整合、复杂/常用算法与设计的实现</Description>
+  </PropertyGroup>
+
+  <!-- 为 netstandard2.0 设置 LangVersion -->  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">  
+    <LangVersion>7.3</LangVersion> <!-- 或其他支持的版本 -->  
+  </PropertyGroup>  
+  <!-- 为 net461 设置 LangVersion -->  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net461'">  
+    <LangVersion>7.3</LangVersion> <!-- net461 不支持 C# 8 或更高版本，因此使用 7.3 或更低版本 -->  
+  </PropertyGroup>  
+  <!-- 为 net6.0 设置 LangVersion -->  
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">  
+    <LangVersion>10.0</LangVersion> <!-- net6.0 支持 C# 10 -->  
+  </PropertyGroup> 
+</Project>
