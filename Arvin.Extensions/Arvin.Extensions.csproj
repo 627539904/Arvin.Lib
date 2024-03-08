@@ -5,9 +5,10 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <!--NuGet配置-->
     <PackageId>Arvin.Extensions</PackageId>  
-    <Version>1.0.0</Version>  
+    <Version>1.0.3</Version>  
     <Authors>Arvin Jing</Authors>  
-    <Description>Nuget包发布测试【无实现】，立项，计划用于各种扩展及语法糖</Description>
+    <Description>计划用于各种扩展及语法糖</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <!-- 为 netstandard2.0 设置 LangVersion -->  
@@ -24,5 +25,6 @@
   </PropertyGroup>  
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <None Include="README.md" Pack="true" PackagePath="\"/>
   </ItemGroup> 
 </Project>
