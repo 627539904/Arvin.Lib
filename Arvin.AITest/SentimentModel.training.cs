@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ML.Data;
-using Microsoft.ML.Trainers.LightGbm;
 using Microsoft.ML.Trainers;
 using Microsoft.ML;
 
@@ -14,7 +13,7 @@ namespace Arvin_AITest
 {
     public partial class SentimentModel
     {
-        public const string RetrainFilePath =  @"D:\Arvin\Arvin.Lib\Arvin.AITest\yelp_labelled.txt";
+        public const string RetrainFilePath =  @"D:\Arvin\Arvin.Lib\Arvin.AITest\Data\yelp_labelled.txt";
         public const char RetrainSeparatorChar = '	';
         public const bool RetrainHasHeader =  false;
 
@@ -94,7 +93,7 @@ namespace Arvin_AITest
             var pipeline = mlContext.Transforms.Text.FeaturizeText(inputColumnName:@"col0",outputColumnName:@"col0")      
                                     .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"col0"}))      
                                     .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"col1",inputColumnName:@"col1",addKeyValueAnnotationsAsText:false))      
-                                    .Append(mlContext.MulticlassClassification.Trainers.LightGbm(new LightGbmMulticlassTrainer.Options(){NumberOfLeaves=517,NumberOfIterations=802,MinimumExampleCountPerLeaf=20,LearningRate=0.425551556218364,LabelColumnName=@"col1",FeatureColumnName=@"Features",ExampleWeightColumnName=null,Booster=new GradientBooster.Options(){SubsampleFraction=0.999999776672986,FeatureFraction=0.99999999,L1Regularization=4.62075140808159E-09,L2Regularization=0.999999776672986},MaximumBinCountPerFeature=369}))      
+                                    .Append(mlContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy(new LbfgsMaximumEntropyMulticlassTrainer.Options(){L1Regularization=0.06227501F,L2Regularization=0.03125F,LabelColumnName=@"col1",FeatureColumnName=@"Features"}))      
                                     .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"));
 
             return pipeline;

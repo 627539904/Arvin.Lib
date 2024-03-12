@@ -35,7 +35,7 @@
     ]
   },
   "Environment": {
-    "Type": "LocalCPU",
+    "Type": "LocalGPU",
     "Version": 1
   },
   "Type": "TrainingConfig",

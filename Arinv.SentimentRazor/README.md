@@ -9,4 +9,5 @@
 - 数据集：wikipedia-detox-250-line-data.tsv
 - 方案：文本分类
 - 建议训练环境：本地（GPU）,CPU会慢很多
-- 教程来源：https://learn.microsoft.com/zh-cn/dotnet/machine-learning/tutorials/sentiment-analysis-model-builder
+- 教程来源【废弃，版本太早，该案例无法使用】：https://learn.microsoft.com/zh-cn/dotnet/machine-learning/tutorials/sentiment-analysis-model-builder
+- 不可用：Model Builder错误：在请求完成之前, 与远程方的 JSON-RPC 连接已丢失
