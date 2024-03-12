@@ -1,6 +1,6 @@
 ﻿namespace Arvin.Helpers
 {
-    public class Class1
+    public static class TempExtensions
     {
 
     }
