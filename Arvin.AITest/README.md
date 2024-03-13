@@ -3,11 +3,13 @@ Net类库项目，用于Nuget扩展与知识体系整合，计划包含语法糖
 
 # Arvin.AITest
 
-## 情感模型
+## Model Buidler教程（低代码）,适合无编程基础
+
+### 情感模型
 - SentimentModel.mbconfig 情感模型-入门，yelp_labelled.txt为数据集
 - 方案：数据分类
 
-## 预测价格
+### 预测价格
 - TaxiFarePrediction 预测出租车费
 - 数据集：taxi-fare-train.csv
     - 数据集特分析
@@ -21,5 +23,33 @@ Net类库项目，用于Nuget扩展与知识体系整合，计划包含语法糖
 - 方案：值预测
 - 教程来源：https://learn.microsoft.com/zh-cn/dotnet/machine-learning/tutorials/predict-prices-with-model-builder
   
-## 分析Web网站评论情绪
+## API教程，适合有编程基础
+- 来源：https://learn.microsoft.com/zh-cn/dotnet/machine-learning/tutorials/
+
+### 分析情绪（二元分类）
+
+### 对支持问题进行分类（多类分类）
+
+### 预测价格（回归）
+
+### 对鸢尾花进行分类（K平均值聚类分析）
+
+### 推荐影片（矩阵因子分解）
+
+### 图像分类（迁移学习）
+
+### 对图像进行分类（模型组合）
+
+### 预测自行车租赁需求（时序）
+
+### 调用量峰值（异常情况检测）
+
+### 产品销售分析（异常情况检测）
+
+### 检测图像中的对象（对象检测）
+
+### 使用TensorFlow对情绪分类（文本分类）：分析Web网站评论情绪
+- 数据集：sentiment_model
+  - saved_model.pb：TensorFlow 模型本身。 该模型采用表示 IMDB 评论字符串中文本的特征的固定长度（大小为 600）整数数组，并输出两个概率（总和为 1）：输入评论具有正面情绪的概率，以及输入评论具有负面情绪的概率。
+  - imdb_word_index.csv：从单个单词到整数值的映射。 映射用于为 TensorFlow 模型生成输入特征
 - 教程来源：https://learn.microsoft.com/zh-cn/dotnet/machine-learning/tutorials/sentiment-analysis-model-builder

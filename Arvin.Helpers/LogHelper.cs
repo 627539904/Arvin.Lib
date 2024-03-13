@@ -37,7 +37,7 @@ namespace Arvin.Helpers
             throw new NotImplementedException();
         }
 
-        public static void Info(string content)
+        public static void Info(string content="")
         {
             Log.Logger.Information(content);
         }
