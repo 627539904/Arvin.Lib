@@ -1,5 +1,6 @@
 ﻿using Arvin.AITest.Guide.ML_NET.API.GitHubIssueClassification;
 using Arvin.AITest.Guide.ML_NET.API.SentimentAnalysis;
+using Arvin.AITest.Guide.ML_NET.API.TaxiFarePrediction;
 using Arvin.Helpers;
 using Arvin_AITest;
 using Microsoft.ML;
@@ -16,7 +17,8 @@ namespace Arvin.AITest
 
             //FirstExample();
             //Program_SentimentAnalysis.Test();
-            Program_GitHubIssueClassification.Test();
+            //Program_GitHubIssueClassification.Test();
+            Program_TaxiFarePrediction.Test();
 
             Console.ReadKey();
         }

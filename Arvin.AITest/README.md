@@ -25,6 +25,18 @@ Net类库项目，用于Nuget扩展与知识体系整合，计划包含语法糖
   
 ## API教程，适合有编程基础
 - 来源：https://learn.microsoft.com/zh-cn/dotnet/machine-learning/tutorials/
+- 关键词提取（不包含顺序）：
+  - 上下文：MLContext mlContext = new MLContext(seed: 0);
+  - 数据集：训练集和测试集
+  - IDataView
+    - content.Data.LoadFromTextFile(训练集)
+  - 标签(模型的输出)：
+    - Label
+    - Score:Label
+  - 算法选择：###.算法
+  - 应用训练：pipeline.Fit(dataView)
+  - 评估
+    - 评估指标
 
 ### 分析情绪（二元分类）
 - ML_NET.API.SentimentAnalysis
@@ -37,6 +49,11 @@ Net类库项目，用于Nuget扩展与知识体系整合，计划包含语法糖
   - issues_test.tsv 评估模型的准确度
 
 ### 预测价格（回归）
+- ML_NET.API.TaxiFarePrediction
+- 数据集：
+  - taxi-fare-train.csv 
+  - taxi-fare-test.csv 
+- 算法：Regression
 
 ### 对鸢尾花进行分类（K平均值聚类分析）
 
