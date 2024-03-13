@@ -1,4 +1,5 @@
-﻿using Arvin.AITest.Guide.ML_NET.API.SentimentAnalysis;
+﻿using Arvin.AITest.Guide.ML_NET.API.GitHubIssueClassification;
+using Arvin.AITest.Guide.ML_NET.API.SentimentAnalysis;
 using Arvin.Helpers;
 using Arvin_AITest;
 using Microsoft.ML;
@@ -14,8 +15,8 @@ namespace Arvin.AITest
             LogHelper.Init();
 
             //FirstExample();
-            Program_SentimentAnalysis.Test();
-
+            //Program_SentimentAnalysis.Test();
+            Program_GitHubIssueClassification.Test();
 
             Console.ReadKey();
         }

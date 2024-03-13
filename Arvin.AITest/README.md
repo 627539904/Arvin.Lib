@@ -27,8 +27,14 @@ Net类库项目，用于Nuget扩展与知识体系整合，计划包含语法糖
 - 来源：https://learn.microsoft.com/zh-cn/dotnet/machine-learning/tutorials/
 
 ### 分析情绪（二元分类）
+- ML_NET.API.SentimentAnalysis
+- 数据集：yelp_labelled.txt
 
 ### 对支持问题进行分类（多类分类）
+- ML_NET.API.GitHubIssueClassification
+- 数据集：
+  - issues_train.tsv 定型机器虚席模型
+  - issues_test.tsv 评估模型的准确度
 
 ### 预测价格（回归）
 
