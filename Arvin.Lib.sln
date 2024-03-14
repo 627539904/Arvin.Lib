@@ -19,6 +19,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arvin.Data", "Arvin.Data\Ar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arvin.Networking", "Arvin.Networking\Arvin.Networking.csproj", "{E3D3C3C6-F6D1-4E34-8B14-71264BDAA71F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arvin.MathSugar", "Arvin.MathSugar\Arvin.MathSugar.csproj", "{317FF8A8-EC1F-41FC-9C28-77EE48C31D7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arvin.UnitTest", "Arvin.UnitTest\Arvin.UnitTest.csproj", "{C8459585-70C2-4093-989E-6A4D2D50370B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +61,14 @@ Global
 		{E3D3C3C6-F6D1-4E34-8B14-71264BDAA71F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3D3C3C6-F6D1-4E34-8B14-71264BDAA71F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3D3C3C6-F6D1-4E34-8B14-71264BDAA71F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{317FF8A8-EC1F-41FC-9C28-77EE48C31D7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{317FF8A8-EC1F-41FC-9C28-77EE48C31D7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{317FF8A8-EC1F-41FC-9C28-77EE48C31D7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{317FF8A8-EC1F-41FC-9C28-77EE48C31D7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8459585-70C2-4093-989E-6A4D2D50370B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8459585-70C2-4093-989E-6A4D2D50370B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8459585-70C2-4093-989E-6A4D2D50370B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8459585-70C2-4093-989E-6A4D2D50370B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
