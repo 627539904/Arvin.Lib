@@ -5,9 +5,9 @@ using System.Linq;
 namespace Arvin.Extensions
 {
     /// <summary>
-    /// Linq扩展类
+    /// 集合操作扩展
     /// </summary>
-    public static class LinqExtension
+    public static class CollectionExtension
     {
         #region Distinct
 
@@ -184,7 +184,7 @@ namespace Arvin.Extensions
         /// <param name="index1"></param>
         /// <param name="index2"></param>
         /// <returns></returns>
-        public static List<T> Swap<T>(List<T> list, int index1, int index2)
+        public static List<T> Swap<T>(this List<T> list, int index1, int index2)
         {
             var temp = list[index1];
             list[index1] = list[index2];
