@@ -4,21 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Arvin.MathSugar.Models
+namespace Arvin.MathSugar
 {
     /// <summary>
     /// 直线/线段
     /// </summary>
-    public class MLine:ILine<MPoint>
+    public class MLine:MCurve
     {
-        public MPoint Start { get; set; }
-        public MPoint End { get; set; }
-        public double Length { get; set; }
-
         public MLine(MPoint start, MPoint end)
         {
             this.Start = start;
             this.End = end;
+            this.Length = GetLength();
+            this.Mid= GetMid();
         }
     }
 

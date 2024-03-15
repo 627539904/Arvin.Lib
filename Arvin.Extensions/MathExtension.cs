@@ -18,6 +18,25 @@ namespace Arvin.Extensions
         {
             return Math.Abs(d);
         }
+        /// <summary>
+        /// 平方
+        /// </summary>
+        /// <param name="d"></param>
+        /// <returns></returns>
+        public static double Pow2(this double d)
+        {
+            return d * d;
+        }
+        /// <summary>
+        /// n次方
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="n"></param>
+        /// <returns></returns>
+        public static double Pow(this double d, int n)
+        {
+            return Math.Pow(d, n);
+        }
         #endregion
 
         #region IsEqual 等值比较
@@ -36,6 +55,12 @@ namespace Arvin.Extensions
                 return Math.Abs(x - y) <= tolerance;
             else
                 return Math.Abs(x - y) < tolerance;
+        }
+        public static bool IsEqualCore<T>(this T x, T y, Func<bool> isEqualFunc)
+        {
+            if (x == null || y == null) return false;
+            if (x.Equals(y)) return true;
+            return isEqualFunc();
         }
         #endregion
 

@@ -26,7 +26,6 @@
 		<!-- net6.0 支持 C# 10 -->
 	</PropertyGroup>
 	<ItemGroup>
-	  <Folder Include="LinearAlgebra\" />
 	  <Folder Include="Calculus\" />
 	  <Folder Include="Probability\" />
 	  <Folder Include="Statistics\" />
@@ -35,5 +34,8 @@
 	  <Folder Include="Optimize\" />
 	  <Folder Include="Discrete\" />
 	  <Folder Include="NumberCal\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Arvin.Extensions\Arvin.Extensions.csproj" />
 	</ItemGroup>
 </Project>
