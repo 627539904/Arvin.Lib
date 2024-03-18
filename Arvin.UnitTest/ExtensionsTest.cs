@@ -1,9 +1,11 @@
 using Arvin.Extensions;
+using Arvin.Helpers;
 
 namespace Arvin.UnitTest
 {
     public class ExtensionsTest
     {
+        #region CheckExtension
         List<string> nullList = null;
         List<string> hasValsList = new List<string> { "123", "456" };
         [Fact]
@@ -23,5 +25,22 @@ namespace Arvin.UnitTest
             Assert.Equal(expectedResult, actualResult);
             Assert.Equal(expectedResult2, actualResult2);
         }
+        #endregion
+
+        #region ConvertExtension
+        class FromJsonTest
+        {
+            public double[] ArrDouble { set; get; }
+        }
+        [Fact]
+        public void Test_FromJson()
+        {
+            var input = "{\"Item1\":[5.537384295534317e-15,-0.800000011920929,0,0,0.800000011920929,5.537384295534317e-15,0,0,0,0,1,0,-292.3512878417969,-811.814453125,0,1],\"Item2\":[null,null,null,0,null,null,null,0,null,null,null,0,-292.3512878417969,-811.814453125,0,1]}";
+            var input2 = "{\"ArrDouble\":[null,null,null,0,null,null,null,0,null,null,null,0,-292.3512878417969,-811.814453125,0,1]}";
+
+            var testModel= input2.FromJson<FromJsonTest>();
+            LogHelper.Info($"数组长度：{testModel.ArrDouble.Length}");
+        }
+        #endregion
     }
 }

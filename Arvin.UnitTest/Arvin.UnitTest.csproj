@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Arvin.Extensions\Arvin.Extensions.csproj" />
+    <ProjectReference Include="..\Arvin.Helpers\Arvin.Helpers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

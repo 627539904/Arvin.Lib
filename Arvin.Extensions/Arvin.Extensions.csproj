@@ -5,7 +5,7 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <!--NuGet配置-->
     <PackageId>Arvin.Extensions</PackageId>  
-    <Version>1.0.3</Version>  
+    <Version>1.0.4</Version>  
     <Authors>Arvin Jing</Authors>  
     <Description>计划用于各种扩展及语法糖</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -24,7 +24,7 @@
     <LangVersion>10.0</LangVersion> <!-- net6.0 支持 C# 10 -->  
   </PropertyGroup>  
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <None Include="README.md" Pack="true" PackagePath="\"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
   </ItemGroup> 
 </Project>

@@ -253,9 +253,17 @@ namespace Arvin.Extensions
         {
             return JsonConvert.SerializeObject(obj);
         }
+        public static string SerializeObject(this object obj)
+        {
+            return JsonConvert.SerializeObject(obj);
+        }
 
         // 从JSON字符串反序列化到指定类型的对象的扩展方法  
         public static T FromJson<T>(this string json)
+        {
+            return JsonConvert.DeserializeObject<T>(json);
+        }
+        public static T DeserializeObject<T>(this string json)
         {
             return JsonConvert.DeserializeObject<T>(json);
         }
