@@ -30,7 +30,9 @@ namespace Arvin.UnitTest
         #region ConvertExtension
         class FromJsonTest
         {
-            public double[] ArrDouble { set; get; }
+            //public (double[] Item1, double?[] Item2) TupleDouble { get; set; }
+            public double?[] ArrDouble { set; get; }
+            //public List<(double[], double[])> SourceTargetMetrixPairs { get; set; }
         }
         [Fact]
         public void Test_FromJson()
@@ -38,8 +40,11 @@ namespace Arvin.UnitTest
             var input = "{\"Item1\":[5.537384295534317e-15,-0.800000011920929,0,0,0.800000011920929,5.537384295534317e-15,0,0,0,0,1,0,-292.3512878417969,-811.814453125,0,1],\"Item2\":[null,null,null,0,null,null,null,0,null,null,null,0,-292.3512878417969,-811.814453125,0,1]}";
             var input2 = "{\"ArrDouble\":[null,null,null,0,null,null,null,0,null,null,null,0,-292.3512878417969,-811.814453125,0,1]}";
 
-            var testModel= input2.FromJson<FromJsonTest>();
-            LogHelper.Info($"数组长度：{testModel.ArrDouble.Length}");
+            //带有空值的序列化转换
+            //var testModel = input.FromJson<FromJsonTest>();
+            //LogHelper.Info($"数组长度：{testModel.TupleDouble.Item2.Length}");//TupleDouble
+            var testModel = input2.FromJson<FromJsonTest>();
+            LogHelper.Info($"数组长度：{testModel.ArrDouble.Length}");//ArrDouble
         }
         #endregion
     }
