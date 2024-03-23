@@ -1,7 +1,18 @@
 # Arvin.Lib
-Net类库项目，用于Nuget扩展与知识体系整合，计划包含语法糖、算法、复杂运算、常用工具等，以避免工作学习中不断重复开发。
+Net类库项目，用于Nuget扩展与知识体系整合，计划包含语法糖、算法、复杂运算、常用工具、通用设计等，以避免工作学习中不断重复开发。
 
-# Arvin.Extensions
-- 2024-03-08 Nuget包发布测试【无实现】，立项，计划用于各种扩展及语法糖
-- 2024-03-08 Linq扩展及复合运算、数值转换,Json转换，枚举转换等基础实现
-- 2024-03-18 Newtonsoft.Json降级为13.0.1,并增加少量Math语法糖
+## Arvin.Extensions
+- 描述： 计划用于各种扩展及语法糖
+- 结构
+	- 【未实现】AIExtension.cs
+	- 【部分实现】CheckExtension.cs
+	- 【部分实现】CollectionExtension.cs
+	- 【部分实现】CommonExtension.cs
+	- 【已实现】CompareExtension.cs
+	- 【基本实现】ConvertExtension.cs
+	- 【部分实现】DateTimeExtension.cs
+	- 【已实现】JsonExtension.cs
+	- 【部分实现】MathExtension.cs
+	- 【部分实现】ModelExtesion.cs
+	- 【部分实现】StringExtension.cs
+	- 【已实现】XmlExtension.cs

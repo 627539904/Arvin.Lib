@@ -10,7 +10,7 @@ namespace Arvin.Extensions
     public static class MathExtension
     {
         #region 常用
-        public static double ToRound(this double d,int digits = 2)
+        public static double ToRound(this double d, int digits = 2)
         {
             return Math.Round(d, digits);
         }
@@ -36,31 +36,6 @@ namespace Arvin.Extensions
         public static double Pow(this double d, int n)
         {
             return Math.Pow(d, n);
-        }
-        #endregion
-
-        #region IsEqual 等值比较
-        /// <summary>
-        /// 误差值内相等，默认误差值0.001，默认包含0.001,如果不需要包含，设置为false
-        /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="tolerance"></param>
-        /// <param name="isContainBoundary">是否包含误差边界值</param>
-        /// <returns></returns>
-        public static bool IsEqual(this double x, double y, double tolerance = 0.001, bool isContainBoundary = true)
-        {
-            if (tolerance == 0) return x == y;
-            if (isContainBoundary)
-                return Math.Abs(x - y) <= tolerance;
-            else
-                return Math.Abs(x - y) < tolerance;
-        }
-        public static bool IsEqualCore<T>(this T x, T y, Func<bool> isEqualFunc)
-        {
-            if (x == null || y == null) return false;
-            if (x.Equals(y)) return true;
-            return isEqualFunc();
         }
         #endregion
 
