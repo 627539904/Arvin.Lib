@@ -154,6 +154,17 @@ namespace Arvin.Extensions
             }
             return def;
         }
+        public static DateTime ToDateTime(this string value, DateTime def = default)
+        {
+            try
+            {
+                return Convert.ToDateTime(value, CultureInfo.InvariantCulture);
+            }
+            catch
+            {
+                return def;
+            }
+        }
         #endregion
 
         #region 枚举转换
