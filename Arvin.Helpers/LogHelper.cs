@@ -11,15 +11,30 @@ namespace Arvin.Helpers
     {
         private LogHelper()
         {
-            
+
         }
-        public static void Init()
+        public static void Init(ILogger logger = null)
         {
             //全局日志管理
-            Log.Logger = new LoggerConfiguration()
+            Log.Logger = logger ?? new LoggerConfiguration()
                             .MinimumLevel.Information()
                             .WriteTo.Console()
                             //.WriteTo.File("log.txt", rollingInterval: RollingInterval.Day) //需要Install-Package Serilog.Sinks.File
+                            .CreateLogger();
+        }
+        public static ILogger DefaultConsole()
+        {
+            return new LoggerConfiguration()
+                            .MinimumLevel.Information()
+                            .WriteTo.Console()
+                            //.WriteTo.File("log.txt", rollingInterval: RollingInterval.Day) //需要Install-Package Serilog.Sinks.File
+                            .CreateLogger();
+        }
+        public static ILogger DefaultFile()
+        {
+            return new LoggerConfiguration()
+                            .MinimumLevel.Information()
+                            .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day) //需要Install-Package Serilog.Sinks.File
                             .CreateLogger();
         }
         public static void Debug()
@@ -37,7 +52,7 @@ namespace Arvin.Helpers
             throw new NotImplementedException();
         }
 
-        public static void Info(string content="")
+        public static void Info(string content = "")
         {
             Log.Logger.Information(content);
         }

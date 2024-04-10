@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -91,5 +92,123 @@ namespace Arvin.Helpers
                 return null;
             }
         }
+
+
+        #region Old
+        public static Dictionary<ContentType, string> dicContentType = new Dictionary<ContentType, string>
+        {
+            {ContentType.Json,"application/json;charset=UTF-8"},
+            {ContentType.Xml,"application/xml;charset=UTF-8" }
+        };
+
+        #region GetHttpWebRequest
+        public static HttpWebRequest GetHttpWebRequest(string url)
+        {
+            return (HttpWebRequest)WebRequest.Create(url);
+        }
+
+        public static HttpWebRequest GetHttpWebRequest(string url, ContentType contentType, int timeout = 30000)
+        {
+            return GetHttpWebRequest(url, dicContentType[contentType], timeout);
+        }
+
+        public static string LoadSource(string url)
+        {
+            WebClient client = new WebClient();
+            client.Credentials = CredentialCache.DefaultCredentials;//获取或设置用于向Internet资源的请求进行身份验证的网络凭据
+            Byte[] pageData = client.DownloadData(url); //从指定网站下载数据
+            string pageHtml = Encoding.UTF8.GetString(pageData);
+            return pageHtml;
+        }
+
+        public static HttpWebRequest GetHttpWebRequest(string url, string contentType, int timeout = 30000)
+        {
+            HttpWebRequest httpWebRequest = GetHttpWebRequest(url);
+            httpWebRequest.ContentType = contentType;
+            httpWebRequest.Timeout = timeout;
+            return httpWebRequest;
+        }
+        #endregion GetHttpWebRequest
+
+        #region HttpPost
+        public static string HttpPostToXml(string url, string body)
+        {
+            HttpWebRequest httpWebRequest = GetHttpWebRequest(url, ContentType.Xml);
+            return HttpPost(httpWebRequest, body);
+        }
+
+        public static string HttpPostToJson(string url, string body)
+        {
+            HttpWebRequest httpWebRequest = GetHttpWebRequest(url, ContentType.Json);
+            return HttpPost(httpWebRequest, body);
+        }
+        public static string HttpPost(string url, string body)
+        {
+            HttpWebRequest httpWebRequest = GetHttpWebRequest(url);
+            return HttpMethod(httpWebRequest, "POST", body);
+        }
+
+        public static string HttpPost(HttpWebRequest httpWebRequest, string body)
+        {
+            return HttpMethod(httpWebRequest, "POST", body);
+        }
+        public static string HttpPost(string url, string body, WebHeaderCollection collection, ContentType type,
+            string accept = "application/json, text/plain, */*", int timeOut = 60000)
+        {
+            HttpWebRequest httpWebRequest = GetHttpWebRequest(url, type, timeOut);
+            // 请求头的设置
+            httpWebRequest.Headers = collection;
+            httpWebRequest.Accept = accept;
+            return HttpPost(httpWebRequest, body);
+        }
+        #endregion HttpPost
+
+        #region HttpGet
+
+        public static string HttpGet(string url)
+        {
+            HttpWebRequest httpWebRequest = GetHttpWebRequest(url);
+            return HttpGet(httpWebRequest);
+        }
+
+        public static string HttpGet(HttpWebRequest httpWebRequest)
+        {
+            return HttpMethod(httpWebRequest, "GET", "");
+        }
+        #endregion HttpGet
+
+        public static string HttpMethod(HttpWebRequest httpWebRequest, string methodName, string body)
+        {
+            try
+            {
+                httpWebRequest.Method = methodName;
+
+                byte[] btBodys = Encoding.UTF8.GetBytes(body);
+                httpWebRequest.ContentLength = btBodys.Length;
+                httpWebRequest.GetRequestStream().Write(btBodys, 0, btBodys.Length);
+
+                string responseContent = "";
+                using (HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse())
+                {
+                    using (StreamReader streamReader = new StreamReader(httpWebResponse.GetResponseStream()))
+                    {
+                        responseContent = streamReader.ReadToEnd();
+                    }
+                    httpWebRequest.Abort();
+                }
+                return responseContent;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message + ex.InnerException + ex.StackTrace;
+            }
+        }
+        #endregion
+    }
+
+    public enum ContentType
+    {
+        Xml,
+        Json
     }
 }

@@ -1,8 +1,11 @@
 # Arvin.Lib
 Net类库项目，用于Nuget扩展与知识体系整合，计划包含语法糖、算法、复杂运算、常用工具等，以避免工作学习中不断重复开发。
 
-# Arvin.Extensions
-2024-03-08 Nuget包发布测试【无实现】，立项，计划用于各种扩展及语法糖
-
 # Arvin.Helpers
-2024-03 Nuget包发布测试【无实现】，立项，计划用于功能整合、复杂/常用算法与设计的实现
+	- AIHelpers 未实现
+	- DataHelpers 部分实现
+		- IDCardHelper 已实现
+		- PassportHelper 已实现
+	- IOHelpers 未实现
+	- NetWorkHelpers 部分实现，未整合
+	- LogHelper 部分实现，仅实现Serilog的Info
