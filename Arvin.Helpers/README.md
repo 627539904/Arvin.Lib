@@ -5,7 +5,9 @@ Net类库项目，用于Nuget扩展与知识体系整合，计划包含语法糖
 	- AIHelpers 未实现
 	- DataHelpers 部分实现
 		- IDCardHelper 已实现
+		- NameHelper 已实现
 		- PassportHelper 已实现
 	- IOHelpers 未实现
 	- NetWorkHelpers 部分实现，未整合
+	- ConfigHelper 配置文件读取，已实现，但后续可能拆分出去，存在大量其他文件不需要使用的包
 	- LogHelper 部分实现，仅实现Serilog的Info
