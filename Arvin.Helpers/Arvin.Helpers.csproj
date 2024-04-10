@@ -5,7 +5,7 @@
 		<ImplicitUsings>disable</ImplicitUsings>
 		<!--NuGet配置-->
 		<PackageId>Arvin.Helpers</PackageId>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<Authors>Arvin Jing</Authors>
 		<Description>计划用于功能整合、复杂/常用算法与设计的实现</Description>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
