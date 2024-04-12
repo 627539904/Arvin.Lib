@@ -183,9 +183,15 @@ namespace Arvin.Helpers
             {
                 httpWebRequest.Method = methodName;
 
-                byte[] btBodys = Encoding.UTF8.GetBytes(body);
-                httpWebRequest.ContentLength = btBodys.Length;
-                httpWebRequest.GetRequestStream().Write(btBodys, 0, btBodys.Length);
+                httpWebRequest.Method = methodName;
+                if (methodName.Equals("POST", StringComparison.OrdinalIgnoreCase)
+                    || methodName.Equals("PUT", StringComparison.OrdinalIgnoreCase)
+                    || methodName.Equals("PATCH", StringComparison.OrdinalIgnoreCase))
+                {
+                    byte[] bytes = Encoding.UTF8.GetBytes(body);
+                    httpWebRequest.ContentLength = bytes.Length;
+                    httpWebRequest.GetRequestStream().Write(bytes, 0, bytes.Length);
+                }
 
                 string responseContent = "";
                 using (HttpWebResponse httpWebResponse = (HttpWebResponse)httpWebRequest.GetResponse())

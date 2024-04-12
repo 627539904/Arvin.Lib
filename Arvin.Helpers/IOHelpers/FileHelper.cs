@@ -35,5 +35,11 @@ namespace Arvin.Helpers
                 sw.Dispose();
             }
         }
+
+        public static void WriteToText(string path, string contents)
+        {
+            FileHelper file = new FileHelper(path);
+            file.WriteToFile(contents);
+        }
     }
 }
