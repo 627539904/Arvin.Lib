@@ -74,11 +74,22 @@ namespace Arvin.Extensions
         // 序列化对象到JSON字符串的扩展方法  
         public static string ToJson(this object obj)
         {
-            return JsonConvert.SerializeObject(obj);
+            return SerializeObject(obj);
         }
-        public static string SerializeObject(this object obj)
+        public static string ToJsonIgnoreNull(this object obj)
         {
-            return JsonConvert.SerializeObject(obj);
+            return SerializeObject(obj, true);
+        }
+        public static string SerializeObject(this object obj,bool isIgnoreNull = false)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore // 忽略值为null的属性
+            };
+            if (isIgnoreNull)
+                return JsonConvert.SerializeObject(obj, settings);
+            else
+                return JsonConvert.SerializeObject(obj);
         }
 
         // 从JSON字符串反序列化到指定类型的对象的扩展方法  
@@ -102,7 +113,7 @@ namespace Arvin.Extensions
 
         public static string ToJsonString(this object model)
         {
-            return JsonConvert.SerializeObject(model);
+            return SerializeObject(model);
         }
         #endregion
     }

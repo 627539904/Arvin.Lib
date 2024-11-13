@@ -110,6 +110,10 @@ namespace Arvin.Extensions
             }
             return def;
         }
+        public static long ToLong(this string value, long def = 0)
+        {
+            return value.ToInt64(def);
+        }
 
         // ulong (UInt64) 类型  
         public static ulong ToUInt64(this string value, ulong def = 0)
