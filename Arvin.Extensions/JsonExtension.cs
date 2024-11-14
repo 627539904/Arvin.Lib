@@ -71,10 +71,38 @@ namespace Arvin.Extensions
         #endregion
 
         #region Json序列化
-        // 序列化对象到JSON字符串的扩展方法  
-        public static string ToJson(this object obj)
+        public static JsonSerializerSettings IgnoreNull(this JsonSerializerSettings settings)
         {
-            return SerializeObject(obj);
+            if( settings == null)
+                settings = new JsonSerializerSettings();
+            settings.NullValueHandling = NullValueHandling.Ignore;// 忽略值为null的属性
+            return settings;
+        }
+        /// <summary>
+        /// 格式化json字符串
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <returns></returns>
+        public static JsonSerializerSettings Format(this JsonSerializerSettings settings)
+        {
+            if (settings == null)
+                settings = new JsonSerializerSettings();
+            settings.Formatting = Formatting.Indented;
+            return settings;
+        }
+        // 序列化对象到JSON字符串的扩展方法  
+        public static string ToJson(this object obj, JsonSerializerSettings settings=null)
+        {
+            return JsonConvert.SerializeObject(obj, settings);
+        }
+        /// <summary>
+        /// 输出模式，忽略null并格式化
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string ToJsonForPrint(this object obj)
+        {
+            return ToJson(obj, new JsonSerializerSettings().IgnoreNull().Format());
         }
         public static string ToJsonIgnoreNull(this object obj)
         {
@@ -82,14 +110,14 @@ namespace Arvin.Extensions
         }
         public static string SerializeObject(this object obj,bool isIgnoreNull = false)
         {
-            var settings = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore // 忽略值为null的属性
-            };
-            if (isIgnoreNull)
-                return JsonConvert.SerializeObject(obj, settings);
-            else
-                return JsonConvert.SerializeObject(obj);
+            JsonSerializerSettings settings = null;
+            if( isIgnoreNull)
+                settings= settings.IgnoreNull();
+            return JsonConvert.SerializeObject(obj, settings);
+            //if (isIgnoreNull)
+            //    return JsonConvert.SerializeObject(obj, settings);
+            //else
+            //    return JsonConvert.SerializeObject(obj);
         }
 
         // 从JSON字符串反序列化到指定类型的对象的扩展方法  

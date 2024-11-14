@@ -29,5 +29,15 @@ namespace Arvin.Extensions
             else
                 File.WriteAllLines(path, content, encoding);
         }
+
+        /// <summary>
+        /// 根据文件路径获取目录
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetDirectoryFromPath(this string path)
+        {
+            return Path.GetDirectoryName(path);
+        }
     }
 }

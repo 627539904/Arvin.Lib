@@ -14,6 +14,15 @@ namespace Arvin.Extensions
         {
             return list == null || list.Count() == 0;
         }
+
+        /// <summary>
+        /// 集合中是否包含指定元素或值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="value"></param>
+        /// <param name="equalFunc">(sourceItem, value) => sourceItem.Equals(value),使用时请注意包含顺序，使用顺序会影响结果</param>
+        /// <returns></returns>
         public static bool Contains<T>(this IEnumerable<T> source, T value, Func<T, T, bool> equalFunc = null)
         {
             IEqualityComparer<T> comparer = null;
