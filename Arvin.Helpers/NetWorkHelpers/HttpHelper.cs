@@ -40,14 +40,14 @@ namespace Arvin.Helpers
                     content = Encoding.UTF8.GetString(byteArray);
                 }
                 // 输出网页内容到控制台  
-                LogHelper.Info(content);
+                ALog.Info(content);
                 return content;
             }
             catch (HttpRequestException e)
             {
                 // 处理请求异常  
-                LogHelper.Info("\nException Caught!");
-                LogHelper.Info($"Message :{e.Message} ");
+                ALog.Info("\nException Caught!");
+                ALog.Info($"Message :{e.Message} ");
                 return null;
             }
         }
@@ -87,8 +87,8 @@ namespace Arvin.Helpers
             catch (HttpRequestException e)
             {
                 // 处理请求异常  
-                LogHelper.Info("\nException Caught!");
-                LogHelper.Info($"Message :{e.Message} ");
+                ALog.Info("\nException Caught!");
+                ALog.Info($"Message :{e.Message} ");
                 return null;
             }
         }

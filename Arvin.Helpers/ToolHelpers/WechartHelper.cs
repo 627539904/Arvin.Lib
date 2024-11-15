@@ -16,7 +16,7 @@ namespace Arvin.Helpers.ToolHelpers
             string url = $"https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={appid}&secret={appSecret}";
             var result = client.GetAsync(url).Result.Content.ReadAsStringAsync().Result.ToModel<WxEntity>();
             if (!result.errcode.IsNullOrWhiteSpace())//请求access_token出错时计入日志
-                LogHelper.Info($"【GetAccessToken】errcode:{result.errcode} errmsg:{result.errmsg}");
+                ALog.Info($"【GetAccessToken】errcode:{result.errcode} errmsg:{result.errmsg}");
             return result;
         }
 
@@ -33,7 +33,7 @@ namespace Arvin.Helpers.ToolHelpers
             var content = new StringContent(menuJson, UTF8Encoding.UTF8, "application/json");
             var result = client.PostAsync(url, content).Result.Content.ReadAsStringAsync().Result.ToModel<ReturnEntity>();
             if (result.errcode != "0")
-                LogHelper.Info($"【AddMenu】errcode:{result.errcode} errmsg:{result.errmsg}");
+                ALog.Info($"【AddMenu】errcode:{result.errcode} errmsg:{result.errmsg}");
             return result;
         }
 
@@ -52,7 +52,7 @@ namespace Arvin.Helpers.ToolHelpers
             string url = $"https://api.weixin.qq.com/cgi-bin/menu/delete?access_token={token}";
             var result = client.GetAsync(url).Result.Content.ReadAsStringAsync().Result.ToModel<ReturnEntity>();
             if (result.errcode != "0")
-                LogHelper.Info($"【DelMenu】errcode:{result.errcode} errmsg:{result.errmsg}");
+                ALog.Info($"【DelMenu】errcode:{result.errcode} errmsg:{result.errmsg}");
             return result;
         }
 

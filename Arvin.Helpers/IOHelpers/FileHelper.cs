@@ -8,7 +8,7 @@ namespace Arvin.Helpers
     /// <summary>
     /// 文件操作帮助类
     /// </summary>
-    public class FileHelper
+    public partial class FileHelper
     {
         //文件读写
         //压缩解压
