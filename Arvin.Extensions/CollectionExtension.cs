@@ -1,6 +1,10 @@
+using CsvHelper;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Arvin.Extensions
 {
@@ -115,6 +119,18 @@ namespace Arvin.Extensions
         {
             if (source.IsNullOrEmpty()) return source;
             return source.Where(p => p != null).ToList();
+        }
+        /// <summary>
+        /// 过滤null值(自定义什么是null)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="predicate">null判定</param>
+        /// <returns></returns>
+        public static IEnumerable<T> FilterNull<T>(this IEnumerable<T> source,Func<T,bool> predicate)
+        {
+            if (source.IsNullOrEmpty()) return source;
+            return source.Where(p => !predicate(p)).ToList();
         }
         public static Dictionary<TKey, TValue> FilterNull<TKey, TValue>(this Dictionary<TKey, TValue> source)
         {
@@ -312,6 +328,20 @@ namespace Arvin.Extensions
                 list.AddRange(item.ToList());
             }
             return list;
+        }
+        public static Dictionary<TKey,TValue> MeregDic<TKey,TValue>(this Dictionary<TKey,TValue> dic, params Dictionary<TKey,TValue>[] mergeDics)
+        {
+            foreach (var dicItem in mergeDics)
+            {
+                if (dicItem == null)
+                    continue;
+                //dic = dic.Concat(dicItem).ToDictionary(x => x.Key, x => x.Value);
+                foreach (var pairItem in dicItem)
+                {
+                    dic.AddIfNewKeyOrNullValue(pairItem.Key, pairItem.Value);
+                }
+            }
+            return dic;
         }
         #endregion
 
@@ -539,6 +569,29 @@ namespace Arvin.Extensions
         #endregion
 
         #region 字典操作扩展 Dictionary
+        public static bool ContainKeyAny(this Dictionary<string, string> dic,string partkey)
+        {
+            return dic.Keys.Any(k => k.Contains(partkey));
+        }
+        public static bool ContainKeyAnyIgnoreCase(this Dictionary<string, string> dic, string partkey)
+        {
+            return dic.Keys.Any(k => k.ToLower().Contains(partkey.ToLower()));
+        }
+        public static IList<T> ToIList<T,Tkey,TValue>(this Dictionary<Tkey,TValue> dic,Func<KeyValuePair<Tkey,TValue>,T> mapper)
+        {
+            return dic.Select(mapper).ToList();
+        }
+        //字典转csv
+        public static void ToCsv<TRecord>(this Dictionary<string, int> dic, string csvPath, Func<KeyValuePair<string, int>, TRecord> mapper)
+        {
+            using (var writer = new StreamWriter(csvPath, false, Encoding.UTF8))
+            {
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    csv.WriteRecords(dic.Select(mapper));
+                }
+            }
+        }
         public static TKey GetKeyByValue<TKey, TValue>(this Dictionary<TKey, TValue> dic, TValue value, Func<TValue, TValue, bool> equalFunc = null)
         {
             foreach (var item in dic)
@@ -626,6 +679,22 @@ namespace Arvin.Extensions
                 resDic.AddOrAppend(item.Value, item.Key.ItemToList());
             }
             return resDic;
+        }
+        #endregion
+
+        #region 集合运算
+        /// <summary>
+        /// 交集
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> IntersectList<T>(IEnumerable<T> first, IEnumerable<T> second)
+        where T : IEquatable<T>
+        {
+            HashSet<T> set = new HashSet<T>(first);
+            return second.Where(set.Contains);
         }
         #endregion
 

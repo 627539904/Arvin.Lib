@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 
 
@@ -307,5 +311,41 @@ namespace Arvin.Extensions
             return result;
         }
         #endregion 数字转换
+
+        #region Contain
+        public static bool IsContains(this string str,IEnumerable<string> list)
+        {
+            return list.Any(p=>str.ToLower().Contains(p.ToLower()));
+        }
+        #endregion
+
+        public static string TextToImage(this string text, string fileName="test.png",Size? size=null)
+        {
+            if (size == null)
+                size = new Size(150, 150);
+            int w = size.Value.Width;
+            int h = size.Value.Height;
+            // 创建画布
+            Bitmap bitmap = new Bitmap(w, h);//需要System.Drawing.Common包
+            // 创建画笔及字体
+            Graphics graphics = Graphics.FromImage(bitmap);//定义背景颜色/画布
+
+            // 初始字体大小和样式
+            Font initialFont = new Font("Arial", 10); // 起始字体大小可以随意设置，但不要太小
+            SizeF textSize = graphics.MeasureString(text, initialFont);
+
+            float fontSize = w / textSize.Width * initialFont.Size; // 计算字体大小
+            Font font = new Font(initialFont.FontFamily, fontSize, initialFont.Style);//定义字体和大小
+            Brush brush = new SolidBrush(Color.Red);//定义字体颜色
+
+            // 计算文字绘制位置以水平居中
+            PointF textPosition = new PointF(0, (h - fontSize) / 2);
+
+            // 绘制文字
+            graphics.DrawString(text, font, brush, textPosition);
+            // 保存为图片
+            bitmap.Save(fileName, ImageFormat.Png);
+            return fileName;
+        }
     }
 }

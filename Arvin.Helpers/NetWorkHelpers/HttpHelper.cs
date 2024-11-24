@@ -212,9 +212,17 @@ namespace Arvin.Helpers
         #endregion
     }
 
+    /// <summary>
+    /// 内容类型/媒体类型
+    /// </summary>
     public enum ContentType
     {
         Xml,
-        Json
+        Json,
+        Text,
+        Image,
+        Video,
+        Audio,
+        Html
     }
 }

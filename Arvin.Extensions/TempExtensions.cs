@@ -11,28 +11,6 @@ namespace Arvin.Extensions
 {
     public static class TempExtensions
     {
-        #region 集合运算
-        public static IEnumerable<T> IntersectList<T>(IEnumerable<T> first, IEnumerable<T> second)
-        where T : IEquatable<T>
-        {
-            HashSet<T> set = new HashSet<T>(first);
-            return second.Where(set.Contains);
-        }
-        #endregion
-
-        #region 字典操作
-        //字典转csv
-        public static void ToCsv<TRecord>(this Dictionary<string, int> dic, string csvPath, Func<KeyValuePair<string, int>, TRecord> mapper)
-        {
-            using (var writer = new StreamWriter(csvPath, false, Encoding.UTF8))
-            {
-                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                {
-                    csv.WriteRecords(dic.Select(mapper));
-                }
-            }
-        }
-        #endregion
 
         #region 语法糖
         public static T DefaultValue<T>(this T value, T defualtValue)
