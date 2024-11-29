@@ -26,8 +26,6 @@ namespace Arvin.Extensions
 
         public static void WriteAllText(this string content, string path, Encoding encoding=null)
         {
-            if (!string.IsNullOrEmpty(path))
-                return;
             if (encoding == null)
                 File.WriteAllText(path, content);
             else
@@ -54,14 +52,19 @@ namespace Arvin.Extensions
             return Path.GetDirectoryName(path);
         }
 
-        public static void SaveToFile(this string content, string path, Encoding encoding = null)
+        // 确保路径的文件夹存在
+        public static void InitDirectory(this string path)
         {
-            // 确保路径的文件夹存在
             string directoryPath = Path.GetDirectoryName(path);
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
             }
+        }
+
+        public static void SaveToFile(this string content, string path, Encoding encoding = null)
+        {
+            path.InitDirectory();
             content.WriteAllText(path, encoding);
         }
         /// <summary>

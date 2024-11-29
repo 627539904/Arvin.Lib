@@ -73,6 +73,36 @@ namespace Arvin.Extensions
         {
             return string.Join(separator, list);
         }
+        /// <summary>
+        /// 分割字符串
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="chunkSize">块大小</param>
+        /// <param name="overlap">滑动窗口大小</param>
+        /// <returns></returns>
+        public static List<string> SplitStringIntoChunks(this string str, int chunkSize, int overlap = 0)
+        {
+            List<string> chunks = new List<string>();
+            int index = 0;
+            int effectiveChunkSize = chunkSize - overlap; // 实际添加到块中的新字符数
+
+            while (index < str.Length - overlap + 1)
+            {
+                // 计算当前块的结束索引，但不能超过字符串的总长度
+                int endIndex = Math.Min(index + chunkSize, str.Length);
+
+                // 从字符串中提取当前块
+                string chunk = str.Substring(index, endIndex - index);
+
+                // 将当前块添加到列表中
+                chunks.Add(chunk);
+
+                // 更新索引以处理下一个块，注意重叠部分
+                index += effectiveChunkSize;
+            }
+
+            return chunks;
+        }
         #endregion
 
         #region 正则
@@ -313,9 +343,13 @@ namespace Arvin.Extensions
         #endregion 数字转换
 
         #region Contain
-        public static bool IsContains(this string str,IEnumerable<string> list)
+        public static bool IsContainsAny(this string str,IEnumerable<string> list)
         {
             return list.Any(p=>str.ToLower().Contains(p.ToLower()));
+        }
+        public static bool IsContainsAny(this string str,params string[] list)
+        {
+            return list.Any(p => str.ToLower().Contains(p.ToLower()));
         }
         #endregion
 

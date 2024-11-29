@@ -127,6 +127,19 @@ namespace Arvin.Extensions
             return $"{s.Substring(startSubIndex, 2)}:{s.Substring(startSubIndex + 2, 2)}:{s.Substring(startSubIndex + 4, 2)}";
         }
         #endregion
+
+        #region 时间转换
+        //纳秒转秒
+        public static double ToSecond_ns(this long nanoseconds)
+        {
+            return nanoseconds / 1000000000.0;
+        }
+        //纳秒转毫秒
+        public static double ToMillisecond_ns(this long nanoseconds)
+        {
+            return nanoseconds / 1000000.0;
+        }
+        #endregion
     }
 
     /// <summary>
