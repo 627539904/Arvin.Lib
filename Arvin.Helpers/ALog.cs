@@ -31,6 +31,11 @@ namespace Arvin.Helpers
             WriteLine("Info:" + msg);
         }
 
+        public static void Error(string msg)
+        {
+            WriteLine("Error:" + msg);
+        }
+
         public static void Deubg(string msg,bool? isShow=true)
         {
             bool isPrint = isShow ?? IsShowDeubg;

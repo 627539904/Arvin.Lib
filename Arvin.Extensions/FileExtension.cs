@@ -24,22 +24,12 @@ namespace Arvin.Extensions
         }
 
 
-        public static void WriteAllText(this string content, string path, Encoding encoding=null)
+        static void WriteAllText(this string content, string path, Encoding encoding=null)
         {
             if (encoding == null)
                 File.WriteAllText(path, content);
             else
                 File.WriteAllText(path, content, encoding);
-        }
-
-        public static void WriteAllLines(this string[] content, string path, Encoding encoding = null)
-        {
-            if (!string.IsNullOrEmpty(path))
-                return;
-            if (encoding == null)
-                File.WriteAllLines(path, content);
-            else
-                File.WriteAllLines(path, content, encoding);
         }
 
         /// <summary>
@@ -66,6 +56,11 @@ namespace Arvin.Extensions
         {
             path.InitDirectory();
             content.WriteAllText(path, encoding);
+        }
+        public static void SaveToFile(this string[] content, string path)
+        {
+            path.InitDirectory();
+            File.WriteAllLines(path, content, Encoding.UTF8);//无论文件是否存在，都重新写入
         }
         /// <summary>
         /// Dictonary保存到文件

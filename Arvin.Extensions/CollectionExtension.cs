@@ -346,6 +346,12 @@ namespace Arvin.Extensions
         #endregion
 
         #region 查询 Find/Get
+        public static T GetItemByIndex<T>(this IEnumerable<T> list, int index)
+        {
+            if (list.IsNullOrEmpty() || index < 0)
+                return default;
+            return list.ElementAtOrDefault(index);
+        }
 
         /// <summary>
         /// 获取记录所在行

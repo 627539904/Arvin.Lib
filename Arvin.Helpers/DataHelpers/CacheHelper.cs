@@ -90,25 +90,6 @@ namespace Arvin.Helpers
             CacheDic[key].Value = value;
             CacheDic[key].ExpiresTime = expiresTime;
         }
-
-        /// <summary>
-        /// 获取缓存文件路径
-        /// 支持缓存文件[yyyyMMdd]这种时间占位符
-        /// </summary>
-        /// <param name="cachePath"></param>
-        /// <param name="cacheFile"></param>
-        /// <returns></returns>
-        public static string GetCachePath(string cachePath)
-        {
-            if (string.IsNullOrEmpty(cachePath))
-                return "";
-            //提取cacheFile中的日期占位符,如[yyyyMMdd]
-            string pattern = @"\[([^\]]+)\]";
-            var placeholder = cachePath.Match(pattern).Value;
-            var dataFormat=placeholder.Replace("[", "").Replace("]", "");
-            string path = $"{cachePath.Replace(placeholder, DateTime.Now.ToString(dataFormat))}";
-            return path;
-        }
     }
 
     public class CacheModel<T>
