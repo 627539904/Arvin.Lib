@@ -26,7 +26,7 @@ namespace Arvin.Helpers
             Write(msg + Environment.NewLine);
         }
 
-        public static void Info(string msg)
+        public static void Info(string msg="")
         {
             WriteLine("Info:" + msg);
         }

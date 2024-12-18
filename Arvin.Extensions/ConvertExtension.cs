@@ -148,6 +148,10 @@ namespace Arvin.Extensions
             }
             return def;
         }
+        public static double ToDouble(this decimal value, double def = 0)
+        {
+            return Convert.ToDouble(value, CultureInfo.InvariantCulture);
+        }
 
         // decimal 类型  
         public static decimal ToDecimal(this string value, decimal def = 0)
@@ -157,6 +161,10 @@ namespace Arvin.Extensions
                 return result;
             }
             return def;
+        }
+        public static decimal ToDecimal(this double value, decimal def = 0)
+        {
+            return Convert.ToDecimal(value, CultureInfo.InvariantCulture);
         }
         public static DateTime ToDateTime(this string value, DateTime def = default)
         {

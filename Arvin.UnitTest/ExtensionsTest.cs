@@ -42,9 +42,9 @@ namespace Arvin.UnitTest
 
             //带有空值的序列化转换
             //var testModel = input.FromJson<FromJsonTest>();
-            //LogHelper.Info($"数组长度：{testModel.TupleDouble.Item2.Length}");//TupleDouble
+            //ALog.Info($"数组长度：{testModel.TupleDouble.Item2.Length}");//TupleDouble
             var testModel = input2.FromJson<FromJsonTest>();
-            LogHelper.Info($"数组长度：{testModel.ArrDouble.Length}");//ArrDouble
+            ALog.Info($"数组长度：{testModel.ArrDouble.Length}");//ArrDouble
         }
         #endregion
     }

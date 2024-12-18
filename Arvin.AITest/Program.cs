@@ -13,7 +13,7 @@ namespace Arvin.AITest
     {
         static void Main(string[] args)
         {
-            LogHelper.Init();
+            ALog.Info();
 
             //FirstExample();
             //Program_SentimentAnalysis.Test();
@@ -38,7 +38,7 @@ namespace Arvin.AITest
 
             // If Prediction is 1, sentiment is "Positive"; otherwise, sentiment is "Negative"
             var sentiment = result.PredictedLabel == 1 ? "好" : "坏";
-            LogHelper.Info($"Text: {sampleData.Col0}\nSentiment: {sentiment}");
+            ALog.Info($"Text: {sampleData.Col0}\nSentiment: {sentiment}");
         }
         #endregion
 

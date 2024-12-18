@@ -24,13 +24,20 @@ namespace Arvin.Extensions
         }
 
 
-        static void WriteAllText(this string content, string path, Encoding encoding=null)
-        {
-            if (encoding == null)
-                File.WriteAllText(path, content);
-            else
-                File.WriteAllText(path, content, encoding);
-        }
+        //static void WriteAllText(this string content, string path, Encoding encoding=null)
+        //{
+        //    if (encoding == null)
+        //        File.WriteAllText(path, content);
+        //    else
+        //        File.WriteAllText(path, content, encoding);
+        //}
+        //static string ReadAllText(this string path, Encoding encoding = null)
+        //{
+        //    if (encoding == null)
+        //        return File.ReadAllText(path);
+        //    else
+        //        return File.ReadAllText(path, encoding);
+        //}
 
         /// <summary>
         /// 根据文件路径获取目录
@@ -51,11 +58,19 @@ namespace Arvin.Extensions
                 Directory.CreateDirectory(directoryPath);
             }
         }
+        public static void WriteAllLines(this string path, IEnumerable<string> content)
+        {
+            path.InitDirectory();
+            File.WriteAllLines(path, content, Encoding.UTF8);//无论文件是否存在，都重新写入
+        }
 
         public static void SaveToFile(this string content, string path, Encoding encoding = null)
         {
             path.InitDirectory();
-            content.WriteAllText(path, encoding);
+            if (encoding == null)
+                File.WriteAllText(path, content);
+            else
+                File.WriteAllText(path, content, encoding);
         }
         public static void SaveToFile(this string[] content, string path)
         {
@@ -72,7 +87,20 @@ namespace Arvin.Extensions
         {
             if (string.IsNullOrEmpty(path))
                 return;
-            File.WriteAllLines(path, dic.Select(x => $"{x.Key}={x.Value}"), Encoding.UTF8);//无论文件是否存在，都重新写入
+            path.WriteAllLines(dic.Select(x => $"{x.Key}={x.Value}"));
+        }
+        public static void SaveToFile<T>(this Dictionary<T, string> dic, string path) 
+            where T:Enum
+        {
+            if (string.IsNullOrEmpty(path))
+                return;
+            path.WriteAllLines(dic.Select(x => $"{x.Key}={x.Value}"));
+        }
+        public static void SaveToFile<T>(this List<T> list, string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return;
+            list.ToJson().SaveToFile(path);
         }
 
         public static string[] ReadAllLines(this string path)
@@ -83,7 +111,8 @@ namespace Arvin.Extensions
 
         public static void LoadFromFile(this Dictionary<string,string> dic, string path,bool isFirstLoad=true)
         {
-            path.WriteFile(string.Empty);//如果文件不存在，则创建一个空文件
+            if(!File.Exists(path))
+                path.WriteFile(string.Empty);//如果文件不存在，则创建一个空文件
             var content= path.ReadAllLines();
             if (content == null || content.Length == 0) //文件为空
             {
@@ -102,6 +131,19 @@ namespace Arvin.Extensions
             dicRead.ToList().ForEach(x => dic.AddOrUpdate(x.Key, x.Value));
             dic.SaveToFile(path);//数据同步
             return;
+        }
+        public static void LoadFromFile<T>(this Dictionary<T, string> dic, string path, bool isFirstLoad = true)
+            where T : Enum
+        {
+            Dictionary<string,string> dicStr = new Dictionary<string, string>();
+            dicStr.LoadFromFile(path, isFirstLoad);
+            dicStr.ToList().ForEach(x => dic.AddOrUpdate((T)Enum.Parse(typeof(T), x.Key), x.Value));
+        }
+        public static void LoadFromFile<T>(this List<T> list, string path)
+        {
+            if (!File.Exists(path)) return;
+            var content = path.ReadFile();
+            list.AddRange(content.FromJson<List<T>>());
         }
 
         public static void AddOrUpdate(this Dictionary<string, string> dic, string key, string value, string path)

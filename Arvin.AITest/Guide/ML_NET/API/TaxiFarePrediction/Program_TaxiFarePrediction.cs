@@ -50,12 +50,12 @@ namespace Arvin.AITest.Guide.ML_NET.API.TaxiFarePrediction
             //评估模型并创建指标
             var metrics = mlContext.Regression.Evaluate(predictions, "Label", "Score");
             //显示指标
-            LogHelper.Info();
-            LogHelper.Info($"*************************************************");
-            LogHelper.Info($"*       Model quality metrics evaluation         ");
-            LogHelper.Info($"*------------------------------------------------");
-            LogHelper.Info($"*       决定系数:      {metrics.RSquared:0.##}");
-            LogHelper.Info($"*       均方误差根:      {metrics.RootMeanSquaredError:0.##}");
+            ALog.Info();
+            ALog.Info($"*************************************************");
+            ALog.Info($"*       Model quality metrics evaluation         ");
+            ALog.Info($"*------------------------------------------------");
+            ALog.Info($"*       决定系数:      {metrics.RSquared:0.##}");
+            ALog.Info($"*       均方误差根:      {metrics.RootMeanSquaredError:0.##}");
         }
 
         //使用预测模型
@@ -77,9 +77,9 @@ namespace Arvin.AITest.Guide.ML_NET.API.TaxiFarePrediction
             var prediction = predictionFunction.Predict(taxiTripSample);
             //结合测试数据和预测进行报告
             //显示预测结果
-            LogHelper.Info($"**********************************************************************");
-            LogHelper.Info($"预测费用: {prediction.FareAmount:0.####}, 实际费用: 15.5");
-            LogHelper.Info($"**********************************************************************");
+            ALog.Info($"**********************************************************************");
+            ALog.Info($"预测费用: {prediction.FareAmount:0.####}, 实际费用: 15.5");
+            ALog.Info($"**********************************************************************");
         }
     }
 }

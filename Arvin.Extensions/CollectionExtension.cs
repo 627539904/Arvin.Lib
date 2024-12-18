@@ -1,10 +1,12 @@
 using CsvHelper;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Linq.Dynamic.Core;
 
 namespace Arvin.Extensions
 {
@@ -174,6 +176,14 @@ namespace Arvin.Extensions
             if (source == null) return;
             var match = source.FirstOrDefault(p => isEqual(p, item));
             if (match != null) return;
+            source.Add(item);
+        }
+        public static void AddOrUpdate<T>(this IList<T> source, T item, Func<T, T, bool> isEqual)
+        {
+            if (source == null) return;
+            var match = source.FirstOrDefault(p => isEqual(p, item));
+            if(match != null)
+                source.Remove(match);
             source.Add(item);
         }
         /// <summary>
@@ -739,6 +749,42 @@ namespace Arvin.Extensions
                     res.Add(i);
             }
             return res;
+        }
+        #endregion
+
+        #region IList扩展
+        public static BindingList<T> ToBindingList<T>(this IList<T> list)
+        {
+            return new BindingList<T>(list);
+        }
+        public static BindingList<T> ToBindingList<T>(this IEnumerable<T> source)
+        {
+            return new BindingList<T>(source.ToList());
+        }
+        public static void RemoveBy<T>(this IList<T> source, Func<T, bool> predicate)
+        {
+            source.Remove(source.FirstOrDefault(predicate));
+        }
+        public static void RemoveAll<T>(this IList<T> source, Func<T, bool> predicate)
+        {
+            var removeList = source.Where(predicate).ToList();
+            foreach (var item in removeList)
+            {
+                source.Remove(item);
+            }
+        }
+        #endregion
+
+        #region 排序
+        public static IEnumerable<T> OrderByAsc<T>(this IEnumerable<T> source, string propertyName)
+        {
+            return source.AsQueryable()
+                        .OrderBy(propertyName + " ascending");
+        }
+        public static IEnumerable<T> OrderByDesc<T>(this IEnumerable<T> source,string propertyName)
+        {
+            return source.AsQueryable()
+                        .OrderBy(propertyName + " descending");
         }
         #endregion
     }

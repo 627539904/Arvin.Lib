@@ -50,10 +50,10 @@ namespace Arvin.AITest.Guide.ML_NET.API.SentimentAnalysis
             var estimator = mlContext.Transforms.Text.FeaturizeText(outputColumnName: "Features", inputColumnName: nameof(SentimentData.SentimentText))//将文本列 (SentimentText) 特征化为（Features）
                 .Append(mlContext.BinaryClassification.Trainers.SdcaLogisticRegression(labelColumnName: "Label", featureColumnName: "Features")); //SdcaLogisticRegressionBinaryTrainer:分类算法-二元分类
             //定型模型
-            LogHelper.Info("=============== 创建并训练模型 ===============");
+            ALog.Info("=============== 创建并训练模型 ===============");
             var model = estimator.Fit(splitTrainSet);//转换数据集并进行模型训练
-            LogHelper.Info("=============== 结束训练 ===============");
-            LogHelper.Info();
+            ALog.Info("=============== 结束训练 ===============");
+            ALog.Info();
             //根据测试数据预测情绪
             //返回模型
             return model;
@@ -68,19 +68,19 @@ namespace Arvin.AITest.Guide.ML_NET.API.SentimentAnalysis
         static void Evaluate(MLContext mlContext, ITransformer model, IDataView splitTestSet)
         {
             //加载测试数据集
-            LogHelper.Info("=============== 用测试数据评估模型的准确性 ===============");
+            ALog.Info("=============== 用测试数据评估模型的准确性 ===============");
             IDataView predictions = model.Transform(splitTestSet);
             //创建 BinaryClassification 计算器
             //评估模型并创建指标
             CalibratedBinaryClassificationMetrics metrics = mlContext.BinaryClassification.Evaluate(predictions, "Label");//评估：将预测值与测试数据集的实际Label进行比较，返回模型执行情况
             //显示指标
-            LogHelper.Info();
-            LogHelper.Info("模型质量指标评估");
-            LogHelper.Info("--------------------------------");
-            LogHelper.Info($"准确性: {metrics.Accuracy:P2}");
-            LogHelper.Info($"可信度: {metrics.AreaUnderRocCurve:P2}");//指示模型对正面类和负面类进行正确分类的置信度。 应该使 AreaUnderRocCurve 尽可能接近 1。
-            LogHelper.Info($"F1Score: {metrics.F1Score:P2}");//获取模型的 F1 分数，该分数是查准率和查全率之间的平衡关系的度量值。 应该使 F1Score 尽可能接近 1
-            LogHelper.Info("=============== 评估完成 ===============");
+            ALog.Info();
+            ALog.Info("模型质量指标评估");
+            ALog.Info("--------------------------------");
+            ALog.Info($"准确性: {metrics.Accuracy:P2}");
+            ALog.Info($"可信度: {metrics.AreaUnderRocCurve:P2}");//指示模型对正面类和负面类进行正确分类的置信度。 应该使 AreaUnderRocCurve 尽可能接近 1。
+            ALog.Info($"F1Score: {metrics.F1Score:P2}");//获取模型的 F1 分数，该分数是查准率和查全率之间的平衡关系的度量值。 应该使 F1Score 尽可能接近 1
+            ALog.Info("=============== 评估完成 ===============");
         }
 
         /// <summary>
@@ -101,14 +101,14 @@ namespace Arvin.AITest.Guide.ML_NET.API.SentimentAnalysis
             //结合测试数据和预测进行报告
             var resultPrediction = predictionFunction.Predict(sampleStatement);//对单行数据进行预测
             //显示预测结果
-            LogHelper.Info();
-            LogHelper.Info("=============== 用单行文本和测试数据集进行预测测试 ===============");
+            ALog.Info();
+            ALog.Info("=============== 用单行文本和测试数据集进行预测测试 ===============");
 
-            LogHelper.Info();
-            LogHelper.Info($"测试文本: {resultPrediction.SentimentText} | 预测: {(Convert.ToBoolean(resultPrediction.Prediction) ? "积极" : "消极")} | 积极性: {resultPrediction.Probability} ");
+            ALog.Info();
+            ALog.Info($"测试文本: {resultPrediction.SentimentText} | 预测: {(Convert.ToBoolean(resultPrediction.Prediction) ? "积极" : "消极")} | 积极性: {resultPrediction.Probability} ");
 
-            LogHelper.Info("=============== 结束预测 ===============");
-            LogHelper.Info();
+            ALog.Info("=============== 结束预测 ===============");
+            ALog.Info();
         }
 
         /// <summary>
@@ -131,14 +131,14 @@ namespace Arvin.AITest.Guide.ML_NET.API.SentimentAnalysis
             IEnumerable<SentimentPrediction> predictedResults = mlContext.Data.CreateEnumerable<SentimentPrediction>(predictions, reuseRowObject: false);
             //结合测试数据和预测进行报告
             //显示预测结果
-            LogHelper.Info();
+            ALog.Info();
 
-            LogHelper.Info("=============== 加载多样本模型的预测测试 ===============");
+            ALog.Info("=============== 加载多样本模型的预测测试 ===============");
             foreach (SentimentPrediction prediction in predictedResults)
             {
-                LogHelper.Info($"测试文本: {prediction.SentimentText} | 预测: {(Convert.ToBoolean(prediction.Prediction) ? "积极" : "消极")} | 积极性: {prediction.Probability} ");
+                ALog.Info($"测试文本: {prediction.SentimentText} | 预测: {(Convert.ToBoolean(prediction.Prediction) ? "积极" : "消极")} | 积极性: {prediction.Probability} ");
             }
-            LogHelper.Info("=============== 结束预测 ===============");
+            ALog.Info("=============== 结束预测 ===============");
         }
     }
 }

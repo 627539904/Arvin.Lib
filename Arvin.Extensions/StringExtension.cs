@@ -134,6 +134,10 @@ namespace Arvin.Extensions
         {
             return Regex.Matches(source, pattern);
         }
+        public static bool IsMatch(this string source, string pattern)
+        {
+            return Regex.IsMatch(source, pattern, RegexOptions.IgnoreCase);
+        }
         #endregion
 
         #region 字符串反转
@@ -349,6 +353,8 @@ namespace Arvin.Extensions
         }
         public static bool IsContainsAny(this string str,params string[] list)
         {
+            if(str.IsNullOrWhiteSpace())
+                return false;
             return list.Any(p => str.ToLower().Contains(p.ToLower()));
         }
         #endregion

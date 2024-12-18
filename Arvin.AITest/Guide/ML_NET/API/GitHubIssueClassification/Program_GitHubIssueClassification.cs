@@ -71,7 +71,7 @@ namespace Arvin.AITest.Guide.ML_NET.API.GitHubIssueClassification
                 Description = "The WebSockets communication used under the covers by SignalR looks like is going slow in my development machine.."
             };
             var prediction = _predEngine.Predict(issue);//对单行数据进行预测
-            LogHelper.Info($"=============== 单一预测训练结果: {prediction.Area} ===============");
+            ALog.Info($"=============== 单一预测训练结果: {prediction.Area} ===============");
             //返回模型
             return trainingPipeline;
         }
@@ -88,14 +88,14 @@ namespace Arvin.AITest.Guide.ML_NET.API.GitHubIssueClassification
             var testMetrics = _mlContext.MulticlassClassification.Evaluate(_trainedModel.Transform(testDataView));
             //评估模型并创建指标
             //显示指标
-            LogHelper.Info($"*************************************************************************************************************");
-            LogHelper.Info($"*       多类分类模型度量指标-测试数据     ");
-            LogHelper.Info($"*------------------------------------------------------------------------------------------------------------");
-            LogHelper.Info($"*       微观准确性:  {testMetrics.MicroAccuracy:0.###}");
-            LogHelper.Info($"*       宏观准确性:  {testMetrics.MacroAccuracy:0.###}");
-            LogHelper.Info($"*       对数损失:    {testMetrics.LogLoss:0.###}");
-            LogHelper.Info($"*       对数损失减小:{testMetrics.LogLossReduction:0.###}");
-            LogHelper.Info($"*************************************************************************************************************");
+            ALog.Info($"*************************************************************************************************************");
+            ALog.Info($"*       多类分类模型度量指标-测试数据     ");
+            ALog.Info($"*------------------------------------------------------------------------------------------------------------");
+            ALog.Info($"*       微观准确性:  {testMetrics.MicroAccuracy:0.###}");
+            ALog.Info($"*       宏观准确性:  {testMetrics.MacroAccuracy:0.###}");
+            ALog.Info($"*       对数损失:    {testMetrics.LogLoss:0.###}");
+            ALog.Info($"*       对数损失减小:{testMetrics.LogLossReduction:0.###}");
+            ALog.Info($"*************************************************************************************************************");
             //将模型保存到文件
             SaveModelAsFile(_mlContext, trainingDataViewSchema, _trainedModel);
         }
@@ -125,7 +125,7 @@ namespace Arvin.AITest.Guide.ML_NET.API.GitHubIssueClassification
             var prediction = _predEngine.Predict(singleIssue);
             //结合测试数据和预测进行报告
             //显示预测结果
-            LogHelper.Info($"=============== 单词预测结果: {prediction.Area} ===============");
+            ALog.Info($"=============== 单词预测结果: {prediction.Area} ===============");
         }
     }
 }

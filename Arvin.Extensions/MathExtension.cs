@@ -39,7 +39,15 @@ namespace Arvin.Extensions
         }
         #endregion
 
-        #region 集合运算 Except/Intersect
+        #region 集合运算 Except/Intersect/Union
+        //并集：同类型合并
+        public static IEnumerable<T> UnionAll<T>(this IEnumerable<T> source,IEnumerable<T> second, Func<T, T, bool> equalPredicate = null)
+        {
+            if (source.IsNullOrEmpty() || second.IsNullOrEmpty()) return source;
+            if (equalPredicate == null)
+                return source.Union(second);
+            return source.Union(second).Distinct(equalPredicate);
+        }
         //同类型排除
         public static IEnumerable<T> ExceptAll<T>(this IEnumerable<T> source, IEnumerable<T> expectList, Func<T, T, bool> expectPredicate = null)
         {

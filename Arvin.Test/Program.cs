@@ -3,10 +3,6 @@ using Arvin.Helpers;
 using System;
 using System.Threading.Tasks;
 
-LogHelper.Init();
-
-LogHelper.Info("Hello, World!");
-
 
 // 目标网站的URL  
 string url = "https://www.google.com.hk/";
