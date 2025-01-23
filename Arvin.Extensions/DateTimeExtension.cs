@@ -58,6 +58,14 @@ namespace Arvin.Extensions
         {
             return ToDateTimeString(dt, DateTimeFormat.StandardDate);
         }
+        public static string ToDateString_yyyyMMdd(this DateTime dt)
+        {
+            return dt.ToString("yyyyMMdd");
+        }
+        public static string ToDateString_yyyy_MM_dd(this DateTime dt)
+        {
+            return dt.ToString("yyyy-MM-dd");
+        }
 
         /// <summary>
         /// HH:mm:ss

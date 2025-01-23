@@ -7,6 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Linq.Dynamic.Core;
+using System.Collections;
+using System.Data;
+using System.Reflection;
 
 namespace Arvin.Extensions
 {
@@ -129,7 +132,7 @@ namespace Arvin.Extensions
         /// <param name="source"></param>
         /// <param name="predicate">null判定</param>
         /// <returns></returns>
-        public static IEnumerable<T> FilterNull<T>(this IEnumerable<T> source,Func<T,bool> predicate)
+        public static IEnumerable<T> FilterNull<T>(this IEnumerable<T> source, Func<T, bool> predicate)
         {
             if (source.IsNullOrEmpty()) return source;
             return source.Where(p => !predicate(p)).ToList();
@@ -182,7 +185,7 @@ namespace Arvin.Extensions
         {
             if (source == null) return;
             var match = source.FirstOrDefault(p => isEqual(p, item));
-            if(match != null)
+            if (match != null)
                 source.Remove(match);
             source.Add(item);
         }
@@ -305,6 +308,23 @@ namespace Arvin.Extensions
         #endregion
 
         #region 合并
+        /// <summary>
+        /// 合并多个股票交易字典，按日期计算涨跌幅的平均值。
+        /// </summary>
+        /// <param name="dicList">包含多个日期-涨跌幅字典的列表。</param>
+        /// <returns>合并后的日期-涨跌幅平均值字典。</returns>
+        public static Dictionary<string, decimal> MergeDicList(this List<Dictionary<string, decimal>> dicList)
+        {
+            // 使用 LINQ 的 Lookup 方法按键（日期）分组
+            var lookup = dicList.SelectMany(dict => dict)
+                                 .ToLookup(kv => kv.Key, kv => kv.Value);
+
+            // 将分组转换为字典，并计算每个日期的涨跌幅平均值
+            return lookup.ToDictionary(
+                group => group.Key, // 日期作为键
+                group => group.Average() // 计算涨跌幅平均值作为值
+            );
+        }
         public static List<T> MergeList<T>(this T obj, params T[] mergeItem)
         {
             List<T> res = new List<T>();
@@ -339,7 +359,7 @@ namespace Arvin.Extensions
             }
             return list;
         }
-        public static Dictionary<TKey,TValue> MeregDic<TKey,TValue>(this Dictionary<TKey,TValue> dic, params Dictionary<TKey,TValue>[] mergeDics)
+        public static Dictionary<TKey, TValue> MeregDic<TKey, TValue>(this Dictionary<TKey, TValue> dic, params Dictionary<TKey, TValue>[] mergeDics)
         {
             foreach (var dicItem in mergeDics)
             {
@@ -420,6 +440,11 @@ namespace Arvin.Extensions
             if (source.IsNullOrEmpty()) return default;
             return source.OrderBy(selector).Last();
         }
+        public static TSource FindMax<TSource, TValue>(this IEnumerable<TSource> source, Func<TSource, TValue> selector)
+        {
+            if (source.IsNullOrEmpty()) return default;
+            return source.OrderBy(selector).Last();
+        }
 
         /// <summary>
         /// 获取非最大值所有的记录
@@ -445,6 +470,13 @@ namespace Arvin.Extensions
         /// <param name="expectData">source中需要排除掉的元素</param>
         /// <returns></returns>
         public static TSource FindMin<TSource>(this IEnumerable<TSource> source, Func<TSource, double> selector, params TSource[] expectData)
+        {
+            if (source.IsNullOrEmpty()) return default;
+            if (!expectData.IsNullOrEmpty())
+                source = source.Except(expectData);
+            return source.OrderBy(selector).FirstOrDefault();
+        }
+        public static TSource FindMin<TSource, TValue>(this IEnumerable<TSource> source, Func<TSource, TValue> selector, params TSource[] expectData)
         {
             if (source.IsNullOrEmpty()) return default;
             if (!expectData.IsNullOrEmpty())
@@ -582,10 +614,22 @@ namespace Arvin.Extensions
             }
             return min;
         }
+        /// <summary>
+        /// 从lastIndex开始向前取count个元素
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="lastIndex"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public static List<T> GetRangeLast<T>(this List<T> source, int lastIndex, int count)
+        {
+            return source.GetRange(lastIndex - count + 1, count);
+        }
         #endregion
 
         #region 字典操作扩展 Dictionary
-        public static bool ContainKeyAny(this Dictionary<string, string> dic,string partkey)
+        public static bool ContainKeyAny(this Dictionary<string, string> dic, string partkey)
         {
             return dic.Keys.Any(k => k.Contains(partkey));
         }
@@ -593,7 +637,7 @@ namespace Arvin.Extensions
         {
             return dic.Keys.Any(k => k.ToLower().Contains(partkey.ToLower()));
         }
-        public static IList<T> ToIList<T,Tkey,TValue>(this Dictionary<Tkey,TValue> dic,Func<KeyValuePair<Tkey,TValue>,T> mapper)
+        public static IList<T> ToIList<T, Tkey, TValue>(this Dictionary<Tkey, TValue> dic, Func<KeyValuePair<Tkey, TValue>, T> mapper)
         {
             return dic.Select(mapper).ToList();
         }
@@ -781,10 +825,100 @@ namespace Arvin.Extensions
             return source.AsQueryable()
                         .OrderBy(propertyName + " ascending");
         }
-        public static IEnumerable<T> OrderByDesc<T>(this IEnumerable<T> source,string propertyName)
+        public static IEnumerable<T> OrderByDesc<T>(this IEnumerable<T> source, string propertyName)
         {
             return source.AsQueryable()
                         .OrderBy(propertyName + " descending");
+        }
+        public static bool IsAsc<T>(this T[] array) where T : IComparable<T>
+        {
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                if (array[i].CompareTo(array[i + 1]) > 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool IsAsc<T, TSelector>(this T[] array,Func<T,TSelector> selector) where TSelector : IComparable<TSelector>
+        {
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                if (selector(array[i]).CompareTo(selector(array[i + 1])) > 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool IsAsc<T>(this IEnumerable<T> source) where T : IComparable<T>
+        {
+            return source.ToArray().IsAsc();
+        }
+        public static bool IsAsc<T, TSelector>(this IEnumerable<T> source, Func<T, TSelector> selector) where TSelector : IComparable<TSelector>
+        {
+            return source.ToArray().IsAsc(selector);
+        }
+        public static bool IsDesc<T>(this T[] array) where T : IComparable<T>
+        {
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                if (array[i].CompareTo(array[i + 1]) < 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool IsDesc<T, TSelector>(this T[] array, Func<T, TSelector> selector) where TSelector : IComparable<TSelector>
+        {
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                if (selector(array[i]).CompareTo(selector(array[i + 1])) < 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool IsDesc<T>(this IEnumerable<T> source) where T : IComparable<T>
+        {
+            return source.ToArray().IsDesc();
+        }
+        public static bool IsDesc<T, TSelector>(this IEnumerable<T> source, Func<T, TSelector> selector) where TSelector : IComparable<TSelector>
+        {
+            return source.ToArray().IsDesc(selector);
+        }
+        #endregion
+
+        #region DataTable
+        public static DataTable ConvertToDataTable<T>(this List<T> items)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+
+            // 获取T类型的所有属性
+            PropertyInfo[] props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (PropertyInfo prop in props)
+            {
+                // 将每个属性添加为DataTable的列
+                dataTable.Columns.Add(prop.Name, prop.PropertyType);
+            }
+
+            foreach (T item in items)
+            {
+                var values = new object[props.Length];
+                for (int i = 0; i < props.Length; i++)
+                {
+                    // 获取每个属性的值
+                    values[i] = props[i].GetValue(item, null);
+                }
+                // 将属性值作为一行添加到DataTable中
+                dataTable.Rows.Add(values);
+            }
+
+            return dataTable;
         }
         #endregion
     }

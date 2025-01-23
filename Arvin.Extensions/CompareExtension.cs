@@ -85,6 +85,10 @@ namespace Arvin.Extensions
         #endregion
 
         #region IsEqual 等值比较
+        public static bool IsEqual(this decimal x, decimal y, double tolerance = 0.001, bool isContainBoundary = true)
+        {
+            return IsEqual(x.ToDouble(), y.ToDouble(), tolerance, isContainBoundary);
+        }
         /// <summary>
         /// 误差值内相等，默认误差值0.001，默认包含0.001,如果不需要包含，设置为false
         /// </summary>

@@ -1,6 +1,8 @@
-﻿using StackExchange.Redis;
+﻿using Arvin.Extensions;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +22,7 @@ namespace Arvin.Helpers.DBHelpers
     /// </summary>
     public class RedisHelper
     {
+        #region 基本
         // 连接到本地的Redis服务器（默认端口是6379）
         static ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhost");
         //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("your_redis_host:6379,password=your_password"); //远程
@@ -32,34 +35,39 @@ namespace Arvin.Helpers.DBHelpers
         {
             DbIndex = dbIndex;
         }
+        static Dictionary<int, IDatabase> dicDb = new Dictionary<int, IDatabase>();
         public IDatabase GetDB()
         {
+            if (dicDb.ContainsKey(DbIndex))
+            {
+                return dicDb[DbIndex];
+            }
             // 获取数据库实例（默认是db0）
+            IDatabase db;
             if (DbIndex > 0)
             {
-                return redis.GetDatabase(DbIndex);
+                db= redis.GetDatabase(DbIndex);
             }
-            return redis.GetDatabase();
+            else
+            {
+                db = redis.GetDatabase();
+            }
+            dicDb.Add(DbIndex, db);
+            return db;
         }
-        // Select
-        public async Task<string> GetStringAsync(string key)
+        public async Task KeyExpireAsync(string redisKey, TimeSpan expiry)
+        {
+            await GetDB().KeyExpireAsync(redisKey, expiry);
+        }
+        public async Task<bool> KeyDeleteAsync(string key)
         {
             var db = GetDB();
-            var value = await db.StringGetAsync(key).ConfigureAwait(false);
-            return value;
+            return await db.KeyDeleteAsync(key);
         }
-
-        //Add Or Update
-        public async Task SetAsync(string key, string value)
+        public bool KeyDelete(string key)
         {
             var db = GetDB();
-            await db.StringSetAsync(key, value).ConfigureAwait(false);
-        }
-
-        public async Task<bool> DeleteKeyAsync(string key)
-        {
-            var db = GetDB();
-            return await db.KeyDeleteAsync(key).ConfigureAwait(false);
+            return db.KeyDelete(key);
         }
 
 
@@ -67,6 +75,176 @@ namespace Arvin.Helpers.DBHelpers
         {
             redis.Close();
         }
+
+        public bool Exists(string redisKey)
+        {
+            return GetDB().KeyExists(redisKey);
+        }
+        ~RedisHelper()
+        {
+            Close();
+        }
+        #endregion
+
+
+        #region String
+        // Select
+        public async Task<string> GetStringAsync(string key)
+        {
+            var db = GetDB();
+            var value = await db.StringGetAsync(key);
+            return value;
+        }
+
+        //Add Or Update
+        public async Task SetAsync(string key, string value)
+        {
+            var db = GetDB();
+            await db.StringSetAsync(key, value);
+        }
+        #endregion
+
+
+        #region List
+
+        public async Task<List<T>> GetList<T>(string redisKey)
+        {
+            RedisValue[] arr = await GetDB().ListRangeAsync(redisKey);
+            List<T> list = new List<T>();
+
+            foreach (var redisValue in arr)
+            {
+                if (redisValue.IsNullOrEmpty)
+                    continue;
+                string json = redisValue.ToString();
+                list.Add(json.ToModel<T>());
+            }
+
+            return list;
+        }
+        public async Task SetList<T>(string redisKey, List<T> list)
+        {
+            // 清空现有的列表（可选，根据需求决定是否要清空）
+            //await GetDB().ListTrimAsync(redisKey, 0, -1, true); // 实际上这是移除列表中的所有元素，相当于清空
+            // 注意：如果不希望清空列表，应该使用其他逻辑来追加元素
+
+            // 序列化列表中的每个对象并添加到 Redis 列表中
+            foreach (var item in list)
+            {
+                string json = item.ToJsonIgnoreNull();
+                await GetDB().ListRightPushAsync(redisKey, json);
+            }
+        }
+        public async Task SetList<T>(string redisKey, List<T> list, TimeSpan expiry)
+        {
+            await SetList(redisKey, list);
+            // 设置过期时间
+            await GetDB().KeyExpireAsync(redisKey, expiry);
+        }
+        #endregion
+
+        #region Hash
+        public async Task SetHash(string redisKey, Dictionary<string, decimal> sectorIndexes)
+        {
+            var dic = sectorIndexes.ToDictionary(k => k.Key, v => v.Value.ToDouble());
+            await SetHash(redisKey, dic);
+        }
+        public async Task SetHash(string redisKey, Dictionary<string, double> sectorIndexes)
+        {
+            var db = GetDB();
+            var hash = new HashEntry[sectorIndexes.Count];
+            int i = 0;
+            foreach (var entry in sectorIndexes)
+            {
+                hash[i] = new HashEntry(entry.Key, entry.Value);//Key,Value的值需要能够被转换为字符串
+                i++;
+            }
+            await db.HashSetAsync(redisKey, hash);
+        }
+        
+        public async Task SetHash(string redisKey, Dictionary<string, string> sectorIndexes)
+        {
+            var db = GetDB();
+            var hash = new HashEntry[sectorIndexes.Count];
+            int i = 0;
+            foreach (var entry in sectorIndexes)
+            {
+                hash[i] = new HashEntry(entry.Key, entry.Value);//Key,Value的值需要能够被转换为字符串
+                i++;
+            }
+            await db.HashSetAsync(redisKey, hash);
+        }
+        public async Task SetHash(string redisKey, Dictionary<string, string> sectorIndexes, TimeSpan expiry)
+        {
+            await SetHash(redisKey, sectorIndexes);
+            // 设置过期时间
+            await GetDB().KeyExpireAsync(redisKey, expiry);
+        }
+        public async Task SetHash<TValue>(string redisKey, Dictionary<string, TValue> sectorIndexes)
+        {
+            var dic = sectorIndexes.ToDictionary(k => k.Key, v => v.Value.ToString());
+            await SetHash(redisKey, dic);
+        }
+        public async Task SetHash<TValue>(string redisKey, Dictionary<string, TValue> sectorIndexes, TimeSpan expiry)
+        {
+            await SetHash(redisKey, sectorIndexes);
+            // 设置过期时间
+            await GetDB().KeyExpireAsync(redisKey, expiry);
+        }
+        public async Task SetHash<T>(string redisKey, Dictionary<string, List<T>> sectorIndexes)
+        {
+            var dic = sectorIndexes.ToDictionary(k => k.Key, v => v.Value.ToJson());
+            await SetHash(redisKey, dic);
+        }
+        public async Task SetHash<T>(string redisKey, Dictionary<string, List<T>> sectorIndexes, TimeSpan expiry)
+        {
+            await SetHash(redisKey, sectorIndexes);
+            // 设置过期时间
+            await GetDB().KeyExpireAsync(redisKey, expiry);
+        }
+        public Dictionary<string, double> GetHash(string redisKey)
+        {
+            var db = GetDB();
+            var hash = db.HashGetAll(redisKey);
+            var result = new Dictionary<string, double>();
+
+            foreach (var entry in hash)
+            {
+                if (double.TryParse(entry.Value.ToString(), out double value))
+                {
+                    result[entry.Name] = value;
+                }
+                else
+                {
+                    // 处理无法解析为 double 的情况，这里简单跳过
+                    Console.WriteLine($"Warning: Value '{entry.Value}' for key '{entry.Name}' could not be parsed as double.");
+                }
+            }
+
+            return result;
+        }
+        public Dictionary<string, TValue> GetHash<TValue>(string redisKey)
+        {
+            var db = GetDB();
+            var hash = db.HashGetAll(redisKey);
+            var result = new Dictionary<string, TValue>();
+
+            foreach (var entry in hash)
+            {
+                try
+                {
+                    result[entry.Name] = (TValue)Convert.ChangeType(entry.Value, typeof(TValue));
+                }
+                catch
+                {
+                    // 处理无法解析为 TValue 的情况，这里简单跳过
+                    ALog.Error($"Value '{entry.Value}' for key '{entry.Name}' could not be parsed as {typeof(TValue)}.");
+                }
+            }
+
+            return result;
+        }
+        #endregion
     }
 
     public enum NoSqlValueType

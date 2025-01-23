@@ -9,8 +9,9 @@ namespace Arvin.Helpers
 {
     public class ALog
     {
+        public static string AppType = "Cmd";//console or other
         public static bool IsShowDeubg=true;//全局控制是否显示Debug信息
-        static Action<string> LogAction = text => Console.Write(text);
+        static Action<string> LogAction = text => DefaultWrite(text);
 
         public static void SetLogAction(Action<string> action)
         {
@@ -19,6 +20,14 @@ namespace Arvin.Helpers
         public static void Write(string msg)
         {
             LogAction(msg);
+        }
+
+        static void DefaultWrite(string msg)
+        {
+            if (AppType=="Cmd")
+                Console.Write(msg);
+            else
+                System.Diagnostics.Debug.Write(msg);
         }
 
         public static void WriteLine(string msg = "")
@@ -36,7 +45,7 @@ namespace Arvin.Helpers
             WriteLine("Error:" + msg);
         }
 
-        public static void Deubg(string msg,bool? isShow=true)
+        public static void Deubg(string msg, bool? isShow = true)
         {
             bool isPrint = isShow ?? IsShowDeubg;
             if (isPrint)

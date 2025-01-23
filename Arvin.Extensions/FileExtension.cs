@@ -53,6 +53,10 @@ namespace Arvin.Extensions
         public static void InitDirectory(this string path)
         {
             string directoryPath = Path.GetDirectoryName(path);
+            if (directoryPath.IsNullOrWhiteSpace())
+            {
+                return;
+            }
             if (!Directory.Exists(directoryPath))
             {
                 Directory.CreateDirectory(directoryPath);
@@ -161,6 +165,17 @@ namespace Arvin.Extensions
         {
             Delete(dic, key, path);
             dic.SaveToFile(path);
+        }
+
+        public static void Append(this string path, string content)
+        {
+            path.InitDirectory();
+            File.AppendAllText(path, content);
+        }
+        public static void AppendLine(this string path, string content)
+        {
+            path.InitDirectory();
+            File.AppendAllLines(path, new string[] { content });
         }
     }
 }
