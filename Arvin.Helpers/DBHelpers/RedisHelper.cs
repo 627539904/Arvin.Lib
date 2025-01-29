@@ -24,15 +24,14 @@ namespace Arvin.Helpers.DBHelpers
     {
         #region 基本
         // 连接到本地的Redis服务器（默认端口是6379）
-        static ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhost");
+        private ConnectionMultiplexer redis;
         //ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("your_redis_host:6379,password=your_password"); //远程
-        public RedisHelper()
-        {
 
-        }
         public int DbIndex { get; set; } = -1;
-        public RedisHelper(int dbIndex)
+        public RedisHelper(int dbIndex=0, string connectionString = "localhost")
         {
+            if (redis == null)
+                redis = ConnectionMultiplexer.Connect(connectionString);
             DbIndex = dbIndex;
         }
         static Dictionary<int, IDatabase> dicDb = new Dictionary<int, IDatabase>();
