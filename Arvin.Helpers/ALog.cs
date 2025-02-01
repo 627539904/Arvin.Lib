@@ -39,6 +39,10 @@ namespace Arvin.Helpers
         {
             WriteLine("Info:" + msg);
         }
+        public static void Warn(string msg)
+        {
+            WriteLine("Warning:" + msg);
+        }
 
         public static void Error(string msg)
         {

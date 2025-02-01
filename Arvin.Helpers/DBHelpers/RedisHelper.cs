@@ -94,6 +94,12 @@ namespace Arvin.Helpers.DBHelpers
             var value = await db.StringGetAsync(key);
             return value;
         }
+        public string GetString(string key)
+        {
+            var db = GetDB();
+            var value = db.StringGet(key);
+            return value;
+        }
 
         //Add Or Update
         public async Task SetAsync(string key, string value)
@@ -101,12 +107,17 @@ namespace Arvin.Helpers.DBHelpers
             var db = GetDB();
             await db.StringSetAsync(key, value);
         }
+        public void Set(string key, string value)
+        {
+            var db = GetDB();
+            db.StringSet(key, value);
+        }
         #endregion
 
 
         #region List
 
-        public async Task<List<T>> GetList<T>(string redisKey)
+        public async Task<List<T>> GetListAsync<T>(string redisKey)
         {
             RedisValue[] arr = await GetDB().ListRangeAsync(redisKey);
             List<T> list = new List<T>();
@@ -121,7 +132,7 @@ namespace Arvin.Helpers.DBHelpers
 
             return list;
         }
-        public async Task SetList<T>(string redisKey, List<T> list)
+        public async Task SetListAsync<T>(string redisKey, List<T> list)
         {
             // 清空现有的列表（可选，根据需求决定是否要清空）
             //await GetDB().ListTrimAsync(redisKey, 0, -1, true); // 实际上这是移除列表中的所有元素，相当于清空
@@ -134,21 +145,85 @@ namespace Arvin.Helpers.DBHelpers
                 await GetDB().ListRightPushAsync(redisKey, json);
             }
         }
-        public async Task SetList<T>(string redisKey, List<T> list, TimeSpan expiry)
+        public async Task SetListAsync<T>(string redisKey, List<T> list, TimeSpan expiry)
         {
-            await SetList(redisKey, list);
+            await SetListAsync(redisKey, list);
             // 设置过期时间
             await GetDB().KeyExpireAsync(redisKey, expiry);
         }
         #endregion
 
+        #region Set
+        public async Task SetSetAsync<T>(string redisKey, List<T> list)
+        {
+            foreach (var item in list)
+            {
+                string json = item.ToJsonIgnoreNull();
+                await GetDB().SetAddAsync(redisKey, json);
+            }
+        }
+        public async Task SetSetAsync<T>(string redisKey, List<T> list, TimeSpan expiry)
+        {
+            await SetSetAsync(redisKey, list);
+            // 设置过期时间
+            await GetDB().KeyExpireAsync(redisKey, expiry);
+        }
+        public async Task<List<T>> GetSetAsync<T>(string redisKey)
+        {
+            RedisValue[] arr = await GetDB().SetMembersAsync(redisKey);//从Redis集合中获取所有Set成员
+            List<T> list = new List<T>();
+            foreach (var redisValue in arr)
+            {
+                if (redisValue.IsNullOrEmpty)
+                {
+                    continue;
+                }
+                string json = redisValue.ToString();
+                list.Add(json.ToModel<T>());
+            }
+            return list;
+        }
+        #endregion
+
+        #region SortedSet
+        public async Task SetSortedSetAsync<T>(string redisKey, List<T> list,List<double> scores)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                var item = list[i];
+                var score = scores[i];
+                string json = item.ToJsonIgnoreNull();
+                await GetDB().SortedSetAddAsync(redisKey, json, score);
+            }
+        }
+        public async Task SetSortedSetAsync<T>(string redisKey, List<T> list,List<double> scores, TimeSpan expiry)
+        {
+            await SetSortedSetAsync(redisKey, list, scores);
+            // 设置过期时间
+            await GetDB().KeyExpireAsync(redisKey, expiry);
+        }
+        public async Task<List<T>> GetSortedSetAsync<T>(string redisKey)
+        {
+            RedisValue[] arr = await GetDB().SortedSetRangeByRankAsync(redisKey);//从Redis有序集合中获取所有SortedSet成员
+            List<T> list = new List<T>();
+            foreach (var redisValue in arr)
+            {
+                if (redisValue.IsNullOrEmpty)
+                    continue;
+                string json = redisValue.ToString();
+                list.Add(json.ToModel<T>());
+            }
+            return list;
+        }
+        #endregion
+
         #region Hash
-        public async Task SetHash(string redisKey, Dictionary<string, decimal> sectorIndexes)
+        public async Task SetHashAsync(string redisKey, Dictionary<string, decimal> sectorIndexes)
         {
             var dic = sectorIndexes.ToDictionary(k => k.Key, v => v.Value.ToDouble());
-            await SetHash(redisKey, dic);
+            await SetHashAsync(redisKey, dic);
         }
-        public async Task SetHash(string redisKey, Dictionary<string, double> sectorIndexes)
+        public async Task SetHashAsync(string redisKey, Dictionary<string, double> sectorIndexes)
         {
             var db = GetDB();
             var hash = new HashEntry[sectorIndexes.Count];
@@ -161,7 +236,7 @@ namespace Arvin.Helpers.DBHelpers
             await db.HashSetAsync(redisKey, hash);
         }
         
-        public async Task SetHash(string redisKey, Dictionary<string, string> sectorIndexes)
+        public async Task SetHashAsync(string redisKey, Dictionary<string, string> sectorIndexes)
         {
             var db = GetDB();
             var hash = new HashEntry[sectorIndexes.Count];
@@ -173,31 +248,31 @@ namespace Arvin.Helpers.DBHelpers
             }
             await db.HashSetAsync(redisKey, hash);
         }
-        public async Task SetHash(string redisKey, Dictionary<string, string> sectorIndexes, TimeSpan expiry)
+        public async Task SetHashAsync(string redisKey, Dictionary<string, string> sectorIndexes, TimeSpan expiry)
         {
-            await SetHash(redisKey, sectorIndexes);
+            await SetHashAsync(redisKey, sectorIndexes);
             // 设置过期时间
             await GetDB().KeyExpireAsync(redisKey, expiry);
         }
-        public async Task SetHash<TValue>(string redisKey, Dictionary<string, TValue> sectorIndexes)
+        public async Task SetHashAsync<TValue>(string redisKey, Dictionary<string, TValue> sectorIndexes)
         {
             var dic = sectorIndexes.ToDictionary(k => k.Key, v => v.Value.ToString());
-            await SetHash(redisKey, dic);
+            await SetHashAsync(redisKey, dic);
         }
-        public async Task SetHash<TValue>(string redisKey, Dictionary<string, TValue> sectorIndexes, TimeSpan expiry)
+        public async Task SetHashAsync<TValue>(string redisKey, Dictionary<string, TValue> sectorIndexes, TimeSpan expiry)
         {
-            await SetHash(redisKey, sectorIndexes);
+            await SetHashAsync(redisKey, sectorIndexes);
             // 设置过期时间
             await GetDB().KeyExpireAsync(redisKey, expiry);
         }
-        public async Task SetHash<T>(string redisKey, Dictionary<string, List<T>> sectorIndexes)
+        public async Task SetHashAsync<T>(string redisKey, Dictionary<string, List<T>> sectorIndexes)
         {
             var dic = sectorIndexes.ToDictionary(k => k.Key, v => v.Value.ToJson());
-            await SetHash(redisKey, dic);
+            await SetHashAsync(redisKey, dic);
         }
-        public async Task SetHash<T>(string redisKey, Dictionary<string, List<T>> sectorIndexes, TimeSpan expiry)
+        public async Task SetHashAsync<T>(string redisKey, Dictionary<string, List<T>> sectorIndexes, TimeSpan expiry)
         {
-            await SetHash(redisKey, sectorIndexes);
+            await SetHashAsync(redisKey, sectorIndexes);
             // 设置过期时间
             await GetDB().KeyExpireAsync(redisKey, expiry);
         }
@@ -216,7 +291,7 @@ namespace Arvin.Helpers.DBHelpers
                 else
                 {
                     // 处理无法解析为 double 的情况，这里简单跳过
-                    Console.WriteLine($"Warning: Value '{entry.Value}' for key '{entry.Name}' could not be parsed as double.");
+                    ALog.Warn($"Value '{entry.Value}' for key '{entry.Name}' could not be parsed as double.");
                 }
             }
 
@@ -244,6 +319,16 @@ namespace Arvin.Helpers.DBHelpers
             return result;
         }
         #endregion
+
+        #region bitmap ：大量bool值存储
+        
+        #endregion
+
+        #region HyperLogLog
+        #endregion
+
+        #region Geospatial
+        #endregion
     }
 
     public enum NoSqlValueType
@@ -263,7 +348,7 @@ namespace Arvin.Helpers.DBHelpers
         /// </summary>
         Hash,
         /// <summary>
-        /// 位图
+        /// 位图:特殊的数据结构，用于存储二进制位序列，支持对位进行操作。
         /// </summary>
         Bitmaps,
         /// <summary>

@@ -134,7 +134,7 @@ namespace Arvin.Extensions
             return JsonConvert.DeserializeObject<List<T>>(json);
         }
 
-        public static T ToModel<T>(this string json)
+        public static T ToModel<T>(this string json) 
         {
             return JsonConvert.DeserializeObject<T>(json);
         }
