@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Arvin.Extensions;
 
-namespace Arvin.Helpers
+namespace Arvin.LogHelper
 {
     /// <summary>
     /// 错误类,用于记录错误信息，并进行错误处理

@@ -25,7 +25,7 @@ namespace Arvin.Extensions
             if (source.IsNullOrEmpty()) return new List<List<T>>();
             if (source.Count() == 1) return source.ItemToList();
             List<List<T>> res = new List<List<T>>();
-            List<T> hasUsed = new List<T>();//优化迭代器
+            List<T> hasUsed = new List<T>();//优化迭代�?
             foreach (var item in source)
             {
                 if (hasUsed.Contains(item))
@@ -90,11 +90,11 @@ namespace Arvin.Extensions
         }
 
         /// <summary>
-        /// 有序集合获取有序连续元素对
+        /// 有序集合获取有序连续元素�?
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
-        /// <returns>List<i=(source[i], source[i+1])>,其中i为有序集合中元素的顺序</returns>
+        /// <returns>List<i=(source[i], source[i+1])>,其中i为有序集合中元素的顺�?/returns>
         public static List<(T x, T y)> SelectContinuousPair<T>(this List<T> source)
         {
             List<(T x, T y)> res = new List<(T x, T y)>();
@@ -103,7 +103,7 @@ namespace Arvin.Extensions
             return res;
         }
         /// <summary>
-        /// 连续元素对是否在有序集合中相邻
+        /// 连续元素对是否在有序集合中相�?
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="pairX"></param>
@@ -126,7 +126,7 @@ namespace Arvin.Extensions
             return source.Where(p => p != null).ToList();
         }
         /// <summary>
-        /// 过滤null值(自定义什么是null)
+        /// 过滤null�?自定义什么是null)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -168,7 +168,7 @@ namespace Arvin.Extensions
         }
 
         /// <summary>
-        /// 添加：重复时不添加
+        /// 添加：重复时不添�?
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -190,7 +190,7 @@ namespace Arvin.Extensions
             source.Add(item);
         }
         /// <summary>
-        /// 新增或取消
+        /// 新增或取�?
         /// 默认取消断言（重复取消）：source.Contains(item)
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -287,7 +287,7 @@ namespace Arvin.Extensions
         /// <param name="source"></param>
         /// <param name="largePredicate">大组断言</param>
         /// <param name="splitFunc">拆分方案</param>
-        /// <param name="maxTimes">最大可拆次数</param>
+        /// <param name="maxTimes">最大可拆次�?/param>
         /// <returns></returns>
         public static List<List<T>> SplitLarge<T>(this List<T> source, Func<List<T>, bool> largePredicate, Func<List<T>, List<List<T>>> splitFunc, int maxTimes = 10)
         {
@@ -309,20 +309,20 @@ namespace Arvin.Extensions
 
         #region 合并
         /// <summary>
-        /// 合并多个股票交易字典，按日期计算涨跌幅的平均值。
+        /// 合并多个股票交易字典，按日期计算涨跌幅的平均值�?
         /// </summary>
-        /// <param name="dicList">包含多个日期-涨跌幅字典的列表。</param>
-        /// <returns>合并后的日期-涨跌幅平均值字典。</returns>
+        /// <param name="dicList">包含多个日期-涨跌幅字典的列表�?/param>
+        /// <returns>合并后的日期-涨跌幅平均值字典�?/returns>
         public static Dictionary<string, decimal> MergeDicList(this List<Dictionary<string, decimal>> dicList)
         {
-            // 使用 LINQ 的 Lookup 方法按键（日期）分组
+            // 使用 LINQ �?Lookup 方法按键（日期）分组
             var lookup = dicList.SelectMany(dict => dict)
                                  .ToLookup(kv => kv.Key, kv => kv.Value);
 
-            // 将分组转换为字典，并计算每个日期的涨跌幅平均值
+            // 将分组转换为字典，并计算每个日期的涨跌幅平均�?
             return lookup.ToDictionary(
-                group => group.Key, // 日期作为键
-                group => group.Average() // 计算涨跌幅平均值作为值
+                group => group.Key, // 日期作为�?
+                group => group.Average() // 计算涨跌幅平均值作为�?
             );
         }
         public static List<T> MergeList<T>(this T obj, params T[] mergeItem)
@@ -398,7 +398,7 @@ namespace Arvin.Extensions
             return null;
         }
         /// <summary>
-        /// 两个集合排列组合对比后距离/关系最近的键值对
+        /// 两个集合排列组合对比后距�?关系最近的键值对
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="TSecond"></typeparam>
@@ -467,7 +467,7 @@ namespace Arvin.Extensions
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="selector"></param>
-        /// <param name="expectData">source中需要排除掉的元素</param>
+        /// <param name="expectData">source中需要排除掉的元�?/param>
         /// <returns></returns>
         public static TSource FindMin<TSource>(this IEnumerable<TSource> source, Func<TSource, double> selector, params TSource[] expectData)
         {
@@ -584,11 +584,11 @@ namespace Arvin.Extensions
         }
 
         /// <summary>
-        /// 查找大OverValue的最小值
+        /// 查找大OverValue的最小�?
         /// </summary>
         /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
-        /// <param name="func">计算比较的函数</param>
+        /// <param name="func">计算比较的函�?/param>
         /// <param name="overValue"></param>
         /// <returns></returns>
         public static TSource FindOverMin<TSource>(this IEnumerable<TSource> source, Func<TSource, double> func, double overValue)
@@ -615,7 +615,7 @@ namespace Arvin.Extensions
             return min;
         }
         /// <summary>
-        /// 从lastIndex开始向前取count个元素
+        /// 从lastIndex开始向前取count个元�?
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -760,11 +760,11 @@ namespace Arvin.Extensions
 
         #region 复合运算 break-list分解
         /// <summary>
-        /// list分解未list组列表
+        /// list分解未list组列�?
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
-        /// <param name="breakIndex">分界点</param>
+        /// <param name="breakIndex">分界�?/param>
         /// <returns></returns>
         public static List<List<T>> BreakList<T>(this List<T> list, List<int> breakIndexs)
         {
@@ -778,7 +778,7 @@ namespace Arvin.Extensions
             return res;
         }
         /// <summary>
-        /// 获取中断点索引
+        /// 获取中断点索�?
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
@@ -897,7 +897,7 @@ namespace Arvin.Extensions
         {
             DataTable dataTable = new DataTable(typeof(T).Name);
 
-            // 获取T类型的所有属性
+            // 获取T类型的所有属�?
             PropertyInfo[] props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             foreach (PropertyInfo prop in props)
@@ -911,10 +911,10 @@ namespace Arvin.Extensions
                 var values = new object[props.Length];
                 for (int i = 0; i < props.Length; i++)
                 {
-                    // 获取每个属性的值
+                    // 获取每个属性的�?
                     values[i] = props[i].GetValue(item, null);
                 }
-                // 将属性值作为一行添加到DataTable中
+                // 将属性值作为一行添加到DataTable�?
                 dataTable.Rows.Add(values);
             }
 

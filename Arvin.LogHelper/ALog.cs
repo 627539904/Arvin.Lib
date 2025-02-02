@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Arvin.Helpers
+namespace Arvin.LogHelper
 {
     public class ALog
     {

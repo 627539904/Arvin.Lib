@@ -43,6 +43,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Arvin\AL.DataStruct\AL.DataStruct.csproj" />
 		<ProjectReference Include="..\Arvin.Extensions\Arvin.Extensions.csproj" />
+		<ProjectReference Include="..\Arvin.LogHelper\Arvin.LogHelper.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
