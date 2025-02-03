@@ -1,0 +1,14 @@
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\bin\Debug\netstandard2.0\Arvin.LogHelper.deps.json
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\bin\Debug\netstandard2.0\Arvin.LogHelper.dll
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\bin\Debug\netstandard2.0\Arvin.LogHelper.pdb
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\bin\Debug\netstandard2.0\Arvin.Extensions.dll
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\bin\Debug\netstandard2.0\Arvin.Extensions.pdb
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\obj\Debug\netstandard2.0\Arvin.LogHelper.csproj.AssemblyReference.cache
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\obj\Debug\netstandard2.0\Arvin.LogHelper.GeneratedMSBuildEditorConfig.editorconfig
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\obj\Debug\netstandard2.0\Arvin.LogHelper.AssemblyInfoInputs.cache
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\obj\Debug\netstandard2.0\Arvin.LogHelper.AssemblyInfo.cs
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\obj\Debug\netstandard2.0\Arvin.LogHelper.csproj.CoreCompileInputs.cache
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\obj\Debug\netstandard2.0\Arvin.LogHelper.sourcelink.json
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\obj\Debug\netstandard2.0\Arvin.Lo.151347BB.Up2Date
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\obj\Debug\netstandard2.0\Arvin.LogHelper.dll
+F:\Arvin\Repos\Arvin.Lib\Arvin.LogHelper\obj\Debug\netstandard2.0\Arvin.LogHelper.pdb

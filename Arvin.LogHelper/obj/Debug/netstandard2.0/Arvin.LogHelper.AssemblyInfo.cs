@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("日志帮助类库")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+31f27e49ba32c0125af7679c577233664da59712")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+27c480130b609345ca81ecc0bc359d52c400b17f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Arvin.LogHelper")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Arvin.LogHelper")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
