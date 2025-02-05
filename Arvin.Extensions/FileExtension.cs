@@ -48,6 +48,10 @@ namespace Arvin.Extensions
         {
             return Path.GetDirectoryName(path);
         }
+        public static string GetFileNameWithExtensionFromPath(this string path)
+        {
+            return Path.GetFileName(path);
+        }
 
         // 确保路径的文件夹存在
         public static void InitDirectory(this string path)
