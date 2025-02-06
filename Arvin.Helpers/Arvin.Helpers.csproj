@@ -41,7 +41,6 @@
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\Arvin\AL.DataStruct\AL.DataStruct.csproj" />
 		<ProjectReference Include="..\Arvin.Extensions\Arvin.Extensions.csproj" />
 		<ProjectReference Include="..\Arvin.LogHelper\Arvin.LogHelper.csproj" />
 	</ItemGroup>
