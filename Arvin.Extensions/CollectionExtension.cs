@@ -921,6 +921,29 @@ namespace Arvin.Extensions
             return dataTable;
         }
         #endregion
+
+        #region Take
+        public static IEnumerable<T> LastTake<T>(this IEnumerable<T> source, int? count)
+        {
+            if (count == null)
+                return source;
+            if (count.Value < 0)
+                throw new ArgumentOutOfRangeException(nameof(count));
+#if NETCOREAPP2_0_OR_GREATER || NETSTANDARD2_1_OR_GREATER
+            return source.TakeLast(count.Value);
+#else
+          if (count.Value < 0) 
+              throw new ArgumentOutOfRangeException(nameof(count));
+            return source.Skip(Math.Max(0, source.Count() - count.Value));
+#endif
+        }
+        public static IEnumerable<T> TakeIfNotNull<T>(this IEnumerable<T> source, int? count)
+        {
+            if (count == null)
+                return source;
+            return source.Take(count.Value);
+        }
+        #endregion
     }
 
 
