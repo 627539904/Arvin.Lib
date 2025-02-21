@@ -11,6 +11,7 @@ namespace Arvin.LogHelper
     {
         public static string AppType = "Cmd";//console or other
         public static bool IsShowDeubg=true;//全局控制是否显示Debug信息
+        public static bool IsPrint=true;//全局控制是否打印日志
         static Action<string> LogAction = text => DefaultWrite(text);
 
         public static void SetLogAction(Action<string> action)
@@ -19,7 +20,8 @@ namespace Arvin.LogHelper
         }
         public static void Write(string msg)
         {
-            LogAction(msg);
+            if (IsPrint)
+                LogAction(msg);
         }
 
         static void DefaultWrite(string msg)
@@ -49,7 +51,7 @@ namespace Arvin.LogHelper
             WriteLine("Error:" + msg);
         }
 
-        public static void Deubg(string msg, bool? isShow = true)
+        public static void Debug(string msg, bool? isShow = true)
         {
             bool isPrint = isShow ?? IsShowDeubg;
             if (isPrint)
@@ -58,7 +60,7 @@ namespace Arvin.LogHelper
 
         public static void LogToLine(string content, string log_dir = null)
         {
-            Console.WriteLine(content);
+            WriteLine(content);
             bool isPrintToFile = !string.IsNullOrEmpty(log_dir);
             if (isPrintToFile)
             {

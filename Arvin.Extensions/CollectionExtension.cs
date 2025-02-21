@@ -376,6 +376,12 @@ namespace Arvin.Extensions
         #endregion
 
         #region 查询 Find/Get
+        public static IEnumerable<T> GetRangeByIndex<T>(this IEnumerable<T> list, int startIndex, int endIndex)
+        {
+            if (list.IsNullOrEmpty() || startIndex < 0 || endIndex < 0)
+                return null;
+            return list.Skip(startIndex).Take(endIndex - startIndex + 1);
+        }
         public static T GetItemByIndex<T>(this IEnumerable<T> list, int index)
         {
             if (list.IsNullOrEmpty() || index < 0)
@@ -624,7 +630,14 @@ namespace Arvin.Extensions
         /// <returns></returns>
         public static List<T> GetRangeLast<T>(this List<T> source, int lastIndex, int count)
         {
-            return source.GetRange(lastIndex - count + 1, count);
+            if(lastIndex<0||count<=0)
+                throw new ArgumentException("参数错误");
+            if (source.IsNullOrEmpty())
+                return source;
+            //var index = Math.Max(0, lastIndex - count + 1);
+            //if (index == 0)
+            //    return new List<T>();
+            return source.Take(lastIndex + 1).LastTake(count).ToList();
         }
         #endregion
 
