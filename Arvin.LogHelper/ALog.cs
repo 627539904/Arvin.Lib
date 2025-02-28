@@ -51,10 +51,9 @@ namespace Arvin.LogHelper
             WriteLine("Error:" + msg);
         }
 
-        public static void Debug(string msg, bool? isShow = true)
+        public static void Debug(string msg)
         {
-            bool isPrint = isShow ?? IsShowDeubg;
-            if (isPrint)
+            if (IsShowDeubg)
                 WriteLine("Debug:" + msg);
         }
 

@@ -19,7 +19,14 @@ namespace Arvin.Extensions
     public static class CollectionExtension
     {
         #region Group
-        //聚类：根据自定义同组断言聚类分组
+        /// <summary>
+        /// 聚类：根据自定义同组断言聚类分组
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="isGroupFunc"></param>
+        /// <param name="isEqualFunc"></param>
+        /// <returns></returns>
         public static List<List<T>> GroupWhere<T>(this List<T> source, Func<T, T, bool> isGroupFunc, Func<T, T, bool> isEqualFunc = null)
         {
             if (source.IsNullOrEmpty()) return new List<List<T>>();
@@ -116,6 +123,52 @@ namespace Arvin.Extensions
         public static List<T> PairToList<T>(this (T x, T y) pair)
         {
             return new List<T> { pair.x, pair.y };
+        }
+
+        /// <summary>
+        /// 将有序集合转换为相邻元素对序列（支持泛型集合与延迟执行）
+        /// </summary>
+        /// <typeparam name="T">元素类型</typeparam>
+        /// <param name="source">输入集合</param>
+        /// <param name="step">配对步长（默认1，支持非连续配对）</param>
+        /// <exception cref="ArgumentNullException">空集合异常</exception>
+        public static IEnumerable<(T Previous, T Current)> ListToPair<T>(
+            this IEnumerable<T> source,
+            int step = 1)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            if (step < 1)
+                throw new ArgumentOutOfRangeException(nameof(step));
+
+            var buffer = new Queue<T>(step + 1);
+            foreach (var item in source)
+            {
+                buffer.Enqueue(item);
+                if (buffer.Count > step)
+                {
+                    var previous = buffer.Dequeue();
+                    yield return (previous, item);
+                }
+            }
+        }
+
+        public static IEnumerable<(T Previous, T Current)> Pairwise<T>(this IEnumerable<T> source)
+        {
+            return source.ListToPair();
+        }
+
+        /// <summary>
+        /// 相邻元素配对处理
+        /// </summary>
+        /// <typeparam name="T">元素类型</typeparam>
+        /// <param name="source">输入序列</param>
+        /// <param name="selector">处理函数（prev, current）=> result</param>
+        public static IEnumerable<TResult> Pairwise<T, TResult>(
+            this IEnumerable<T> source,
+            Func<T, T, TResult> selector)
+        {
+            return source.ListToPair().Select(pair => selector(pair.Previous, pair.Current));
         }
         #endregion
 

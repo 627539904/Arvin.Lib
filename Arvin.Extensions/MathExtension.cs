@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -85,6 +85,29 @@ namespace Arvin.Extensions
             var union = first.ToList().MergeList(second.ToList());
             var res = union.ExceptWhere(interect, equalFunc);
             return res;
+        }
+        #endregion
+
+        #region divide
+        public static double Divide(this double d, double divisor)
+        {
+            if (divisor == 0) return 0;
+            return d / divisor;
+        }
+        public static double Divide(this double d, int divisor)
+        {
+            if (divisor == 0) return 0;
+            return d / divisor;
+        }
+        public static double Divide(this int d, double divisor)
+        {
+            if (divisor == 0) return 0;
+            return d / divisor;
+        }
+        public static double Divide(this int d, int divisor)
+        {
+            if (divisor == 0) return 0;
+            return d / divisor;
         }
         #endregion
     }
