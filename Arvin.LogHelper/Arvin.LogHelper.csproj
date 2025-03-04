@@ -27,6 +27,9 @@
 		<!-- net6.0 支持 C# 10 -->
 	</PropertyGroup>
 	<ItemGroup>
+	  <PackageReference Include="EntityFramework" Version="6.5.1" />
+	</ItemGroup>
+	<ItemGroup>
 	  <ProjectReference Include="..\Arvin.Extensions\Arvin.Extensions.csproj" />
 	</ItemGroup>
 
