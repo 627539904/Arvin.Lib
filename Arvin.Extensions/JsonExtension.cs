@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Dynamic;
 
 namespace Arvin.Extensions
 {
@@ -73,7 +74,7 @@ namespace Arvin.Extensions
         #region Json序列化
         public static JsonSerializerSettings IgnoreNull(this JsonSerializerSettings settings)
         {
-            if( settings == null)
+            if (settings == null)
                 settings = new JsonSerializerSettings();
             settings.NullValueHandling = NullValueHandling.Ignore;// 忽略值为null的属性
             return settings;
@@ -91,7 +92,7 @@ namespace Arvin.Extensions
             return settings;
         }
         // 序列化对象到JSON字符串的扩展方法  
-        public static string ToJson(this object obj, JsonSerializerSettings settings=null)
+        public static string ToJson(this object obj, JsonSerializerSettings settings = null)
         {
             return JsonConvert.SerializeObject(obj, settings);
         }
@@ -108,11 +109,11 @@ namespace Arvin.Extensions
         {
             return SerializeObject(obj, true);
         }
-        public static string SerializeObject(this object obj,bool isIgnoreNull = false)
+        public static string SerializeObject(this object obj, bool isIgnoreNull = false)
         {
             JsonSerializerSettings settings = null;
-            if( isIgnoreNull)
-                settings= settings.IgnoreNull();
+            if (isIgnoreNull)
+                settings = settings.IgnoreNull();
             return JsonConvert.SerializeObject(obj, settings);
             //if (isIgnoreNull)
             //    return JsonConvert.SerializeObject(obj, settings);
@@ -134,7 +135,7 @@ namespace Arvin.Extensions
             return JsonConvert.DeserializeObject<List<T>>(json);
         }
 
-        public static T ToModel<T>(this string json) 
+        public static T ToModel<T>(this string json)
         {
             return JsonConvert.DeserializeObject<T>(json);
         }
@@ -142,6 +143,53 @@ namespace Arvin.Extensions
         public static string ToJsonString(this object model)
         {
             return SerializeObject(model);
+        }
+        #endregion
+
+        #region Parser
+        public static dynamic TryParseJson(this string json, Func<JProperty, object> customRule = null)
+        {
+            try
+            {
+                JToken root = JToken.Parse(json);
+                return ParseToken(root, customRule);
+            }
+            catch
+            {
+                return null; // 解析失败返回 null ,说明字符串不是json格式
+            }
+        }
+
+        private static dynamic ParseToken(this JToken token, Func<JProperty, object> rule)
+        {
+            switch (token.Type)
+            {
+                case JTokenType.Object:
+                    var expando = new ExpandoObject();
+                    var dict = expando as IDictionary<string, object>;
+                    foreach (JProperty prop in token)
+                    {
+                        // 应用自定义规则（如字段名转换）
+                        object value = rule != null ? rule(prop) : ParseToken(prop.Value, rule);
+                        dict[prop.Name] = value ?? ParseToken(prop.Value, rule); // 规则未处理则递归解析
+                    }
+                    return expando;
+                case JTokenType.Array:
+                    var list = new List<dynamic>();
+                    foreach (JToken item in token)
+                        list.Add(ParseToken(item, rule));
+                    return list;
+                case JTokenType.String:
+                    return token.Value<string>();
+                case JTokenType.Integer:
+                    return token.Value<long>();
+                case JTokenType.Float:
+                    return token.Value<double>();
+                case JTokenType.Boolean:
+                    return token.Value<bool>();
+                default:
+                    return token.ToString();
+            }
         }
         #endregion
     }

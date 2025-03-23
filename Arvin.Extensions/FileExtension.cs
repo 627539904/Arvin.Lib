@@ -52,6 +52,10 @@ namespace Arvin.Extensions
         {
             return Path.GetFileName(path);
         }
+        public static string GetExtensionFromPath(this string path)
+        {
+            return Path.GetExtension(path);
+        }
 
         // 确保路径的文件夹存在
         public static void InitDirectory(this string path)
@@ -91,14 +95,14 @@ namespace Arvin.Extensions
         /// </summary>
         /// <param name="dic"></param>
         /// <param name="path"></param>
-        public static void SaveToFile(this Dictionary<string,string> dic,string path)
+        public static void SaveToFile(this Dictionary<string, string> dic, string path)
         {
             if (string.IsNullOrEmpty(path))
                 return;
             path.WriteAllLines(dic.Select(x => $"{x.Key}={x.Value}"));
         }
-        public static void SaveToFile<T>(this Dictionary<T, string> dic, string path) 
-            where T:Enum
+        public static void SaveToFile<T>(this Dictionary<T, string> dic, string path)
+            where T : Enum
         {
             if (string.IsNullOrEmpty(path))
                 return;
@@ -117,24 +121,24 @@ namespace Arvin.Extensions
             return File.ReadAllLines(path);
         }
 
-        public static void LoadFromFile(this Dictionary<string,string> dic, string path,bool isFirstLoad=true)
+        public static void LoadFromFile(this Dictionary<string, string> dic, string path, bool isFirstLoad = true)
         {
-            if(!File.Exists(path))
+            if (!File.Exists(path))
                 path.WriteFile(string.Empty);//如果文件不存在，则创建一个空文件
-            var content= path.ReadAllLines();
+            var content = path.ReadAllLines();
             if (content == null || content.Length == 0) //文件为空
             {
                 dic.SaveToFile(path);//数据同步
                 return;
             }
-            if(dic.Count==0) //字典为空，直接赋值
+            if (dic.Count == 0) //字典为空，直接赋值
             {
                 content.ToList().ForEach(x => dic.AddOrUpdate(x.Split('=')[0], x.Split('=')[1], path));
                 return;
             }
             //数据合并：字典文件都不为空，数据可能存在冲突，数据合并以文件数据为准
-            var dicRead= content.ToDictionary(x => x.Split('=')[0], x => x.Split('=')[1]);
-            if(isFirstLoad)
+            var dicRead = content.ToDictionary(x => x.Split('=')[0], x => x.Split('=')[1]);
+            if (isFirstLoad)
                 dic.Clear();
             dicRead.ToList().ForEach(x => dic.AddOrUpdate(x.Key, x.Value));
             dic.SaveToFile(path);//数据同步
@@ -143,7 +147,7 @@ namespace Arvin.Extensions
         public static void LoadFromFile<T>(this Dictionary<T, string> dic, string path, bool isFirstLoad = true)
             where T : Enum
         {
-            Dictionary<string,string> dicStr = new Dictionary<string, string>();
+            Dictionary<string, string> dicStr = new Dictionary<string, string>();
             dicStr.LoadFromFile(path, isFirstLoad);
             dicStr.ToList().ForEach(x => dic.AddOrUpdate((T)Enum.Parse(typeof(T), x.Key), x.Value));
         }
